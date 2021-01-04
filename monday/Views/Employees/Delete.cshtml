@@ -1,0 +1,62 @@
+﻿@model mondayWebApp.Models.Employee
+
+@{
+    ViewData["Title"] = "Usuń pracownika";
+}
+
+<h1>Usuń pracownika</h1>
+
+<h3>Czy chcesz usunąć pracownika ?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Imię
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EmployeeName)
+        </dd>
+        <dt class = "col-sm-2">
+            Nazwisko
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EmployeeSurname)
+        </dd>
+        <dt class = "col-sm-2">
+            Data urodzenia
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EmployeeDateOfBirth)
+        </dd>
+        <dt class = "col-sm-2">
+            Numer telefonu
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EmployeePhoneNumber)
+        </dd>
+        <dt class = "col-sm-2">
+            Rola
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EmployeeRole)
+        </dd>
+        <dt class = "col-sm-2">
+            Oddział
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Department.DepartmentID)
+        </dd class>
+        <dt class = "col-sm-2">
+            Projekt
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Project.ProjectID)
+        </dd class>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="EmployeeID" />
+        <input type="submit" value="Usuń pracownika" class="btn btn-danger" /> |
+        <a asp-action="Index">Wróć do listy pracowników</a>
+    </form>
+</div>
