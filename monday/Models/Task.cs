@@ -14,6 +14,7 @@ namespace mondayWebApp.Models
         public Employee TaskEmployeeResponsibleFor { get; set; }
 
         // Nawiguje do obiektu Project
+        public int? ProjectID { get; set; }
         public Project Project { get; set; }
 
         // Blokuje rekord przed edycją

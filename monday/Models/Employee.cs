@@ -16,9 +16,11 @@ namespace mondayWebApp.Models
         public virtual Address Address { get; set; }
 
         // Nawiguje do obiektu Department
+        public int? DepartmentID { get; set; }
         public Department Department { get; set; }
 
         // Nawiguje do obiektu Project
+        public int? ProjectID { get; set; }
         public Project Project { get; set; }
 
         // Blokuje rekord przed edycją

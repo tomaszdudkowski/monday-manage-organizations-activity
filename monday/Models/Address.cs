@@ -2,6 +2,7 @@
 {
     public class Address
     {
+        public int AddressID { get; set; }
         public string PostCode { get; set; }
         public string City { get; set; }
         public string Street { get; set; }
@@ -9,7 +10,8 @@
         public string ApartmentNumber { get; set; }
 
         // Nawiguje do objektu Employee
-        public virtual Employee Employee { get; set; }
+        public int EmployeeID { get; set; }
+        public Employee Employee { get; set; }
 
         // Blokuje rekord przed edycją
         public bool IsEdited { get; set; }
