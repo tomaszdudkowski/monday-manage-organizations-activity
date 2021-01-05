@@ -1,13 +1,13 @@
 ﻿@model string
 
-<h1 class="bg-info text-white">Create a Role</h1>
-<a asp-action="Index" class="btn btn-secondary">Back</a>
+<h1 class="bg-success text-white">UTWÓRZ ROLĘ</h1>
+<a asp-action="Index" class="btn btn-secondary">WSTECZ</a>
 <div asp-validation-summary="All" class="text-danger"></div>
 
 <form asp-action="Create" method="post">
     <div class="form-group">
-        <label for="name">Name:</label>
+        <label for="name">NAZWA ROLI:</label>
         <input name="name" class="form-control" />
     </div>
-    <button type="submit" class="btn btn-primary">Create</button>
+    <button type="submit" class="btn btn-primary">UTWÓRZ ROLĘ</button>
 </form>

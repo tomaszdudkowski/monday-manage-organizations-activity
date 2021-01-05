@@ -27,6 +27,7 @@ namespace mondayWebApp.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Employees/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -47,8 +48,8 @@ namespace mondayWebApp.Controllers
             return View(employee);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Employees/Create
-        [Authorize(Roles ="Admin")]
         public IActionResult Create()
         {
             ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID");
@@ -56,6 +57,7 @@ namespace mondayWebApp.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: Employees/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -72,6 +74,7 @@ namespace mondayWebApp.Controllers
             return View(employee);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Employees/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -90,6 +93,7 @@ namespace mondayWebApp.Controllers
             return View(employee);
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: Employees/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -125,6 +129,7 @@ namespace mondayWebApp.Controllers
             return View(employee);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Employees/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -145,6 +150,7 @@ namespace mondayWebApp.Controllers
             return View(employee);
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

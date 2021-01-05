@@ -1,11 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @model IEnumerable<IdentityRole>
 
-<h1 class="bg-info text-white">All Roles</h1>
-<a asp-action="Create" class="btn btn-secondary">Create a Role</a>
+<h1 class="bg-success text-white">ROLE UŻYTKOWNIKÓW</h1>
+<a asp-action="Create" class="btn btn-secondary">UTWÓRZ NOWĄ ROLĘ</a>
 
 <table class="table table-sm table-bordered table-bordered">
-    <tr><th>ID</th><th>Name</th><th>Users</th><th>Update</th><th>Delete</th></tr>
+    <tr><th>ID</th><th>NAZWA ROLI</th><th>UŻYTKOWNICY</th><th>USTAWIENIA</th><th>USUŃ</th></tr>
     @foreach (var role in Model)
     {
         <tr>
@@ -16,7 +16,7 @@
             <td>
                 <form asp-action="Delete" asp-route-id="@role.Id" method="post">
                     <button type="submit" class="btn btn-sm btn-danger">
-                        Delete
+                        USUŃ
                     </button>
                 </form>
             </td>

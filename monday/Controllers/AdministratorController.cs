@@ -8,9 +8,11 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using mondayWebApp.Models.IdentityModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace mondayWebApp.Controllers
 {
+    [Authorize(Roles = "Superadmin")]
     public class AdministratorController : Controller
     {
         private RoleManager<IdentityRole> roleManager;

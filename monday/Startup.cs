@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using mondayWebApp.Data;
+using mondayWebApp.Services;
 
 namespace mondayWebApp
 {
@@ -33,12 +34,14 @@ namespace mondayWebApp
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddTransient<SuperadminService>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -59,6 +62,9 @@ namespace mondayWebApp
             app.UseAuthentication();
             app.UseAuthorization();
 
+            SuperadminService superadmin = new SuperadminService(serviceProvider);
+            superadmin.SuperadminRole().Wait();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -67,7 +73,5 @@ namespace mondayWebApp
                 endpoints.MapRazorPages();
             });
         }
-
-
     }
 }
