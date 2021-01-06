@@ -1,0 +1,53 @@
+﻿@model IEnumerable<mondayWebApp.Models.Project>
+
+@{
+    ViewData["Title"] = "Projekty";
+}
+
+<h1>Projekty</h1>
+
+<p>
+    <a asp-action="Create">Utwórz nowy projekt</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nazwa projektu
+            </th>
+            <th>
+                Opis projektu
+            </th>
+            <th>
+                Założenia projektu
+            </th>
+            <th>
+                Data zakończenia projektu
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectDesc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectBrief)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectDeadline)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ProjectID">Edytuj</a> |
+                <a asp-action="Details" asp-route-id="@item.ProjectID">Szczegóły</a> |
+                <a asp-action="Delete" asp-route-id="@item.ProjectID">Usuń</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

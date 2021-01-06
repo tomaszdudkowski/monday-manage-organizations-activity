@@ -1,0 +1,49 @@
+﻿@model mondayWebApp.Models.Project
+
+@{
+    ViewData["Title"] = "Edytuj projekt";
+}
+
+<h1>Edytuj projekt</h1>
+
+<h4>Project</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ProjectID" />
+            <div class="form-group">
+                <label asp-for="ProjectName" class="control-label">Nazwa projektu</label>
+                <input asp-for="ProjectName" class="form-control" />
+                <span asp-validation-for="ProjectName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProjectDesc" class="control-label">Opis projektu</label>
+                <input asp-for="ProjectDesc" class="form-control" />
+                <span asp-validation-for="ProjectDesc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProjectBrief" class="control-label">Założenia projektu</label>
+                <input asp-for="ProjectBrief" class="form-control" />
+                <span asp-validation-for="ProjectBrief" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProjectDeadline" class="control-label">Data zakończenia projektu</label>
+                <input asp-for="ProjectDeadline" class="form-control" />
+                <span asp-validation-for="ProjectDeadline" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Zapisz zmiany" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Wróć do listy projektów</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

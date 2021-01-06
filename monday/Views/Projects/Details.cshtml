@@ -1,0 +1,42 @@
+﻿@model mondayWebApp.Models.Project
+
+@{
+    ViewData["Title"] = "Szczegóły projektu";
+}
+
+<h1>Szczegóły projektu</h1>
+
+<div>
+    <h4>Project</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Nazwa projektu
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ProjectName)
+        </dd>
+        <dt class = "col-sm-2">
+            Opis projektu
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ProjectDesc)
+        </dd>
+        <dt class = "col-sm-2">
+            Założenia projektu
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ProjectBrief)
+        </dd>
+        <dt class = "col-sm-2">
+            Data zakończenia projektu
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ProjectDeadline)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ProjectID">Edytuj projekt</a> |
+    <a asp-action="Index">Wróć do listy projektów</a>
+</div>
