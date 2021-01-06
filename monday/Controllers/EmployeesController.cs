@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,14 @@ namespace mondayWebApp.Controllers
     public class EmployeesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private RoleManager<IdentityRole> roleManager;
+        private UserManager<IdentityUser> userManager;
 
-        public EmployeesController(ApplicationDbContext context)
+        public EmployeesController(ApplicationDbContext context, RoleManager<IdentityRole> roleMgr, UserManager<IdentityUser> userMgr)
         {
             _context = context;
+            roleManager = roleMgr;
+            userManager = userMgr;
         }
 
         // GET: Employees
@@ -39,7 +44,7 @@ namespace mondayWebApp.Controllers
             var employee = await _context.Employees
                 .Include(e => e.Department)
                 .Include(e => e.Project)
-                .FirstOrDefaultAsync(m => m.EmployeeID == id);
+                .FirstOrDefaultAsync(m => m.EmployeeID.Equals(id));
             if (employee == null)
             {
                 return NotFound();
@@ -48,33 +53,66 @@ namespace mondayWebApp.Controllers
             return View(employee);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Superadmin, Admin")]
         // GET: Employees/Create
-        public IActionResult Create()
+        public async Task<IActionResult> CreateAsync()
         {
-            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID");
-            ViewData["ProjectID"] = new SelectList(_context.Projects, "ProjectID", "ProjectID");
+            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentName");
+            ViewData["ProjectID"] = new SelectList(_context.Projects, "ProjectID", "ProjectName");
+            List<IdentityRole> roleList = new List<IdentityRole>();
+            foreach (var item in _context.Roles)
+            {
+                roleList.Add(item);
+            }
+            if (User.IsInRole("Admin") && (!User.IsInRole("Superadmin")))
+            {
+                IdentityRole superadminRole = await roleManager.FindByNameAsync("Superadmin");
+                roleList.Remove(superadminRole);
+            }
+            SelectList roleItems = new SelectList(roleList, "Id", "Name");
+            ViewData["EmployeeRole"] = roleItems;
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Superadmin, Admin")]
         // POST: Employees/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeID,EmployeeName,EmployeeSurname,EmployeeDateOfBirth,EmployeePhoneNumber,EmployeeRole,DepartmentID,ProjectID,IsEdited,IsChecked")] Employee employee)
+        public async Task<IActionResult> Create([Bind("EmployeeID,EmployeePassword,EmployeeEmail,EmployeeName,EmployeeSurname,EmployeeDateOfBirth,EmployeePhoneNumber,EmployeeRole,DepartmentID,ProjectID,IsEdited,IsChecked,IsKierownik")] Employee employee)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(employee);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var user = new IdentityUser();
+                user.UserName = employee.EmployeeEmail;
+                user.Email = employee.EmployeeEmail;
+                user.EmailConfirmed = true;
+
+                string UserPassword = employee.EmployeePassword;
+
+                IdentityResult identityResult = await userManager.CreateAsync(user, UserPassword);
+
+                if (identityResult.Succeeded)
+                {
+                    var roleId = Request.Form["EmployeeRole"];
+                    var role = await roleManager.FindByIdAsync(roleId);
+                    var result = await userManager.AddToRoleAsync(user, role.Name);
+                    var TempUser = await userManager.FindByEmailAsync(user.Email);
+                    employee.EmployeeUserID = TempUser.Id;
+                    employee.EmployeePassword = "";
+                    _context.Add(employee);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+
+
             }
             ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID", employee.DepartmentID);
             ViewData["ProjectID"] = new SelectList(_context.Projects, "ProjectID", "ProjectID", employee.ProjectID);
+            ViewData["EmployeeRole"] = new SelectList(_context.Roles, "Id", "Name", employee.EmployeeRole);
             return View(employee);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Superadmin, Admin")]
         // GET: Employees/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -90,16 +128,39 @@ namespace mondayWebApp.Controllers
             }
             ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID", employee.DepartmentID);
             ViewData["ProjectID"] = new SelectList(_context.Projects, "ProjectID", "ProjectID", employee.ProjectID);
+            List<IdentityRole> roleList = new List<IdentityRole>();
+            foreach (var item in _context.Roles)
+            {
+                roleList.Add(item);
+            }
+            if (User.IsInRole("Admin") && (!User.IsInRole("Superadmin")))
+            {
+                IdentityRole superadminRole = await roleManager.FindByNameAsync("Superadmin");
+                roleList.Remove(superadminRole);
+            }
+            var user = await userManager.FindByIdAsync(employee.EmployeeUserID);
+            var userRole = _context.UserRoles.ToList();
+            string role = "";
+            foreach (var item in userRole)
+            {
+                if (item.UserId == user.Id)
+                {
+                    role = item.RoleId;
+                }
+            }
+            SelectList roleItems = new SelectList(roleList, "Id", "Name", role);
+            ViewData["EmployeeRole"] = roleItems;
             return View(employee);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Superadmin, Admin")]
         // POST: Employees/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmployeeID,EmployeeName,EmployeeSurname,EmployeeDateOfBirth,EmployeePhoneNumber,EmployeeRole,DepartmentID,ProjectID,IsEdited,IsChecked")] Employee employee)
+        public async Task<IActionResult> Edit(string id, [Bind("EmployeeID,EmployeePassword,EmployeeCurrentPassword,EmployeeEmail,EmployeeName,EmployeeSurname,EmployeeDateOfBirth,EmployeePhoneNumber,EmployeeRole,DepartmentID,ProjectID,IsEdited,IsChecked,IsKierownik,EmployeeUserID")] Employee employee)
         {
-            if (id != employee.EmployeeID)
+
+            if (id.Equals(employee.EmployeeID))
             {
                 return NotFound();
             }
@@ -108,12 +169,34 @@ namespace mondayWebApp.Controllers
             {
                 try
                 {
-                    _context.Update(employee);
-                    await _context.SaveChangesAsync();
+                    var user = await userManager.FindByIdAsync(employee.EmployeeUserID);
+
+                    if (employee.EmployeeEmail != null)
+                    {
+                        user.UserName = employee.EmployeeEmail;
+                    }
+
+                    if (employee.EmployeePassword != null)
+                    {
+                        string NewUserPassword = employee.EmployeePassword;
+                        string CurrentUserPassword = employee.EmployeeCurrentPassword;
+
+                        await userManager.ChangePasswordAsync(user, CurrentUserPassword, NewUserPassword);
+                    }
+
+                    var roleId = Request.Form["EmployeeRole"];
+                    if (roleId == Request.Form["EmployeeRole"])
+                    {
+                        var role = await roleManager.FindByIdAsync(roleId);
+                        var result = await userManager.AddToRoleAsync(user, role.Name);
+                        employee.EmployeePassword = "";
+                        _context.Update(employee);
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EmployeeExists(employee.EmployeeID))
+                    if (!EmployeeExists(employee.EmployeeUserID))
                     {
                         return NotFound();
                     }
@@ -141,7 +224,7 @@ namespace mondayWebApp.Controllers
             var employee = await _context.Employees
                 .Include(e => e.Department)
                 .Include(e => e.Project)
-                .FirstOrDefaultAsync(m => m.EmployeeID == id);
+                .FirstOrDefaultAsync(m => m.EmployeeID.Equals(id));
             if (employee == null)
             {
                 return NotFound();
@@ -157,14 +240,16 @@ namespace mondayWebApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var employee = await _context.Employees.FindAsync(id);
+            var user = await userManager.FindByIdAsync(employee.EmployeeUserID);
+            IdentityResult identityResult = await userManager.DeleteAsync(user);
             _context.Employees.Remove(employee);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EmployeeExists(int id)
+        private bool EmployeeExists(string id)
         {
-            return _context.Employees.Any(e => e.EmployeeID == id);
+            return _context.Employees.Any(e => e.EmployeeID.Equals(id));
         }
     }
 }

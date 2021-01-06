@@ -11,6 +11,16 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <label asp-for="EmployeeEmail" class="control-label">Adres email</label>
+                <input asp-for="EmployeeEmail" class="form-control" />
+                <span asp-validation-for="EmployeeEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeePassword" class="control-label">Hasło użytkownika</label>
+                <input asp-for="EmployeePassword" class="form-control" />
+                <span asp-validation-for="EmployeePassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="EmployeeName" class="control-label">Imię</label>
                 <input asp-for="EmployeeName" class="form-control" />
                 <span asp-validation-for="EmployeeName" class="text-danger"></span>
@@ -32,19 +42,18 @@
             </div>
             <div class="form-group">
                 <label asp-for="EmployeeRole" class="control-label">Rola</label>
-                <input asp-for="EmployeeRole" class="form-control" />
-                <span asp-validation-for="EmployeeRole" class="text-danger"></span>
+                <select asp-for="EmployeeRole" class="form-control" asp-items="ViewBag.EmployeeRole"></select>
             </div>
             <div class="form-group">
                 <label asp-for="DepartmentID" class="control-label">Oddział</label>
-                <select asp-for="DepartmentID" class ="form-control" asp-items="ViewBag.DepartmentID"></select>
+                <select asp-for="DepartmentID" class="form-control" asp-items="ViewBag.DepartmentID"></select>
             </div>
             <div class="form-group">
                 <label asp-for="ProjectID" class="control-label">Projekt</label>
-                <select asp-for="ProjectID" class ="form-control" asp-items="ViewBag.ProjectID"></select>
+                <select asp-for="ProjectID" class="form-control" asp-items="ViewBag.ProjectID"></select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Dodaj" class="btn btn-primary" />
+                <input type="submit" value="Dodaj" class="btn btn-primary">
             </div>
         </form>
     </div>

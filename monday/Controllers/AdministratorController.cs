@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace mondayWebApp.Controllers
 {
-    [Authorize(Roles = "Superadmin")]
+    [Authorize(Roles = "Superadmin, Admin")]
     public class AdministratorController : Controller
     {
         private RoleManager<IdentityRole> roleManager;

@@ -5,6 +5,17 @@
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
+    <li class="nav-item">
+        @if (User.IsInRole("Superadmin") || User.IsInRole("Admin"))
+        {
+            <a class="nav-link text-dark" asp-controller="Employees" asp-action="Index">Pracownicy</a>
+        }
+
+        @if (User.IsInRole("Superadmin"))
+        {
+            <a class="nav-link text-dark" asp-controller="Administrator" asp-action="Role">Adminstracja rolami</a>
+        }
+    </li>
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Witaj, @User.Identity.Name !</a>
         </li>
@@ -16,9 +27,6 @@
     }
     else
     {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Zarejestruj się</a>
-        </li>
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Zaloguj się</a>
         </li>

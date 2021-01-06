@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using mondayWebApp.Data;
 
 namespace mondayWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210106114904_ASP_NETIdentityDataModel")]
+    partial class ASP_NETIdentityDataModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,6 +30,9 @@ namespace mondayWebApp.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("EmployeeID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
@@ -37,6 +42,8 @@ namespace mondayWebApp.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployeeID");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
@@ -308,22 +315,28 @@ namespace mondayWebApp.Migrations
                     b.Property<DateTime>("EmployeeDateOfBirth")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("EmployeeEmail")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("EmployeeName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EmployeePhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EmployeeRole")
+                    b.Property<string>("EmployeeSurname")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EmployeeSurname")
+                    b.Property<string>("EmployeeUserID")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsChecked")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsEdited")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsKierownik")
                         .HasColumnType("bit");
 
                     b.Property<int?>("ProjectID")
@@ -409,6 +422,13 @@ namespace mondayWebApp.Migrations
                     b.HasIndex("TaskEmployeeResponsibleForEmployeeID");
 
                     b.ToTable("Tasks");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.HasOne("mondayWebApp.Models.Employee", null)
+                        .WithMany("EmployeeRole")
+                        .HasForeignKey("EmployeeID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
