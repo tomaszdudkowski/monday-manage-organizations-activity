@@ -1,0 +1,35 @@
+﻿@model mondayWebApp.Models.Department
+
+@{
+    ViewData["Title"] = "Szczegóły działu";
+}
+
+<h1>Szczegóły działu</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Nazwa działu
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DepartmentName)
+        </dd>
+        <dt class = "col-sm-2">
+            Opis działu
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DepartmentDesc)
+        </dd>
+        <dt class = "col-sm-2">
+            Data powstania działu
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DepartmentEstablishmentDate)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.DepartmentID">Edytuj dział</a> |
+    <a asp-action="Index">Powrót do listy działów</a>
+</div>

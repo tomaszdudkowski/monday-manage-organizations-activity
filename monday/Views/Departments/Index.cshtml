@@ -1,0 +1,35 @@
+﻿@model IEnumerable<mondayWebApp.Models.Department>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nazwa działu
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DepartmentName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.DepartmentID">Edytuj</a> |
+                <a asp-action="Details" asp-route-id="@item.DepartmentID">Szczegóły</a> |
+                <a asp-action="Delete" asp-route-id="@item.DepartmentID">Usuń</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

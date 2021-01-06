@@ -106,8 +106,8 @@ namespace mondayWebApp.Controllers
 
 
             }
-            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID", employee.DepartmentID);
-            ViewData["ProjectID"] = new SelectList(_context.Projects, "ProjectID", "ProjectID", employee.ProjectID);
+            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentName", employee.DepartmentID);
+            ViewData["ProjectID"] = new SelectList(_context.Projects, "ProjectID", "ProjectName", employee.ProjectID);
             ViewData["EmployeeRole"] = new SelectList(_context.Roles, "Id", "Name", employee.EmployeeRole);
             return View(employee);
         }
@@ -126,8 +126,8 @@ namespace mondayWebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID", employee.DepartmentID);
-            ViewData["ProjectID"] = new SelectList(_context.Projects, "ProjectID", "ProjectID", employee.ProjectID);
+            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentName", employee.DepartmentID);
+            ViewData["ProjectID"] = new SelectList(_context.Projects, "ProjectID", "ProjectName", employee.ProjectID);
             List<IdentityRole> roleList = new List<IdentityRole>();
             foreach (var item in _context.Roles)
             {
@@ -207,8 +207,8 @@ namespace mondayWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID", employee.DepartmentID);
-            ViewData["ProjectID"] = new SelectList(_context.Projects, "ProjectID", "ProjectID", employee.ProjectID);
+            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentName", employee.DepartmentID);
+            ViewData["ProjectID"] = new SelectList(_context.Projects, "ProjectID", "ProjectName", employee.ProjectID);
             return View(employee);
         }
 

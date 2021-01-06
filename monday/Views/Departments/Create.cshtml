@@ -1,0 +1,42 @@
+﻿@model mondayWebApp.Models.Department
+
+@{
+    ViewData["Title"] = "Utwórz nowy dział";
+}
+
+
+<h4>Utwórz nowy dział</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="DepartmentName" class="control-label">Nazwa działu</label>
+                <input asp-for="DepartmentName" class="form-control" />
+                <span asp-validation-for="DepartmentName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DepartmentDesc" class="control-label">Opis działu</label>
+                <input asp-for="DepartmentDesc" class="form-control" />
+                <span asp-validation-for="DepartmentDesc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DepartmentEstablishmentDate" class="control-label">Data powstania działu</label>
+                <input asp-for="DepartmentEstablishmentDate" class="form-control" />
+                <span asp-validation-for="DepartmentEstablishmentDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Utwórz nowy dział" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Wróc do listy działów</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
