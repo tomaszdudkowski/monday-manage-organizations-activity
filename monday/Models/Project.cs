@@ -14,7 +14,7 @@ namespace mondayWebApp.Models
         public DateTime ProjectDeadline { get; set; }
 
         // Nawiguje do zadań projektu
-        public ICollection<Task> Tasks { get; set; }
+        public ICollection<ProjectTask> ProjectTasks { get; set; }
 
         // Nawiguje do listy pracwoników
         public ICollection<Employee> Employees { get; set; }

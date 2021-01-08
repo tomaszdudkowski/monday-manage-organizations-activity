@@ -38,6 +38,7 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EmployeeRole)
+                @*@foreach (var role in item.EmployeeRole) { <p>@role.Name</p> }*@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Department.DepartmentName)

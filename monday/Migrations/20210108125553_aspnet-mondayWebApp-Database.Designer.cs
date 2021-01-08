@@ -10,8 +10,8 @@ using mondayWebApp.Data;
 namespace mondayWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210106114904_ASP_NETIdentityDataModel")]
-    partial class ASP_NETIdentityDataModel
+    [Migration("20210108125553_aspnet-mondayWebApp-Database")]
+    partial class aspnetmondayWebAppDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -385,12 +385,15 @@ namespace mondayWebApp.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("mondayWebApp.Models.Task", b =>
+            modelBuilder.Entity("mondayWebApp.Models.ProjectTask", b =>
                 {
                     b.Property<int>("TaskID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("EmployeeID")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsChecked")
                         .HasColumnType("bit");
@@ -407,21 +410,20 @@ namespace mondayWebApp.Migrations
                     b.Property<DateTime>("TaskDeadline")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("TaskEmployeeResponsibleForEmployeeID")
-                        .HasColumnType("int");
-
                     b.Property<string>("TaskName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TaskID");
 
+                    b.HasIndex("EmployeeID");
+
                     b.HasIndex("ProjectID");
 
-                    b.HasIndex("TaskCreatedByEmployeeID");
+                    b.HasIndex("TaskCreatedByEmployeeID")
+                        .IsUnique()
+                        .HasFilter("[TaskCreatedByEmployeeID] IS NOT NULL");
 
-                    b.HasIndex("TaskEmployeeResponsibleForEmployeeID");
-
-                    b.ToTable("Tasks");
+                    b.ToTable("ProjectTasks");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -512,20 +514,21 @@ namespace mondayWebApp.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
                 });
 
-            modelBuilder.Entity("mondayWebApp.Models.Task", b =>
+            modelBuilder.Entity("mondayWebApp.Models.ProjectTask", b =>
                 {
+                    b.HasOne("mondayWebApp.Models.Employee", "Employee")
+                        .WithMany("ProjectTasks")
+                        .HasForeignKey("EmployeeID")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("mondayWebApp.Models.Project", "Project")
-                        .WithMany("Tasks")
+                        .WithMany("ProjectTasks")
                         .HasForeignKey("ProjectID")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("mondayWebApp.Models.Employee", "TaskCreatedBy")
-                        .WithMany()
-                        .HasForeignKey("TaskCreatedByEmployeeID");
-
-                    b.HasOne("mondayWebApp.Models.Employee", "TaskEmployeeResponsibleFor")
-                        .WithMany()
-                        .HasForeignKey("TaskEmployeeResponsibleForEmployeeID");
+                        .WithOne("ProjectTask")
+                        .HasForeignKey("mondayWebApp.Models.ProjectTask", "TaskCreatedByEmployeeID");
                 });
 #pragma warning restore 612, 618
         }

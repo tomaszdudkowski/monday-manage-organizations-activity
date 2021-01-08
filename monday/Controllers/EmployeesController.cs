@@ -28,7 +28,7 @@ namespace mondayWebApp.Controllers
         // GET: Employees
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Employees.Include(e => e.Department).Include(e => e.Project);
+            var applicationDbContext = _context.Employees.Include(e => e.Department).Include(e => e.Project).Include(e => e.EmployeeRole);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -80,32 +80,32 @@ namespace mondayWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("EmployeeID,EmployeePassword,EmployeeEmail,EmployeeName,EmployeeSurname,EmployeeDateOfBirth,EmployeePhoneNumber,EmployeeRole,DepartmentID,ProjectID,IsEdited,IsChecked,IsKierownik")] Employee employee)
         {
-            if (ModelState.IsValid)
+
+            var user = new IdentityUser();
+            user.UserName = employee.EmployeeEmail;
+            user.Email = employee.EmployeeEmail;
+            user.EmailConfirmed = true;
+
+            string UserPassword = employee.EmployeePassword;
+
+            IdentityResult identityResult = await userManager.CreateAsync(user, UserPassword);
+
+            if (identityResult.Succeeded)
             {
-                var user = new IdentityUser();
-                user.UserName = employee.EmployeeEmail;
-                user.Email = employee.EmployeeEmail;
-                user.EmailConfirmed = true;
-
-                string UserPassword = employee.EmployeePassword;
-
-                IdentityResult identityResult = await userManager.CreateAsync(user, UserPassword);
-
-                if (identityResult.Succeeded)
-                {
-                    var roleId = Request.Form["EmployeeRole"];
-                    var role = await roleManager.FindByIdAsync(roleId);
-                    var result = await userManager.AddToRoleAsync(user, role.Name);
-                    var TempUser = await userManager.FindByEmailAsync(user.Email);
-                    employee.EmployeeUserID = TempUser.Id;
-                    employee.EmployeePassword = "";
-                    _context.Add(employee);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-
-
+                var roleId = Request.Form["EmployeeRole"];
+                var role = await roleManager.FindByIdAsync(roleId);
+                var result = await userManager.AddToRoleAsync(user, role.Name);
+                var TempUser = await userManager.FindByEmailAsync(user.Email);
+                employee.EmployeeUserID = TempUser.Id;
+                employee.EmployeePassword = "";
+                employee.EmployeeRole.Add(role);
+                _context.Add(employee);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
+
+
+
             ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentName", employee.DepartmentID);
             ViewData["ProjectID"] = new SelectList(_context.Projects, "ProjectID", "ProjectName", employee.ProjectID);
             ViewData["EmployeeRole"] = new SelectList(_context.Roles, "Id", "Name", employee.EmployeeRole);
@@ -148,7 +148,8 @@ namespace mondayWebApp.Controllers
                     role = item.RoleId;
                 }
             }
-            SelectList roleItems = new SelectList(roleList, "Id", "Name", role);
+            var role1 = roleManager.FindByNameAsync(role);
+            SelectList roleItems = new SelectList(roleList, "Id", "Name", role1);
             ViewData["EmployeeRole"] = roleItems;
             return View(employee);
         }

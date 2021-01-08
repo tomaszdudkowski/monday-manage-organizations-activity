@@ -12,29 +12,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\Migrations\20210104141025_ASP.NETIdentityData.cs" />
-    <Compile Remove="Data\Migrations\20210104141025_ASP.NETIdentityData.Designer.cs" />
-    <Compile Remove="Data\Migrations\20210104171924_ModelBuilderInDB.cs" />
-    <Compile Remove="Data\Migrations\20210104171924_ModelBuilderInDB.Designer.cs" />
-    <Compile Remove="Data\Migrations\20210105213448_AddSomeInformationToEmployee.cs" />
-    <Compile Remove="Data\Migrations\20210105213448_AddSomeInformationToEmployee.Designer.cs" />
-    <Compile Remove="Data\Migrations\20210106105830_AddIdentityToEmployee.cs" />
-    <Compile Remove="Data\Migrations\20210106105830_AddIdentityToEmployee.Designer.cs" />
-    <Compile Remove="Data\Migrations\20210106105933_AddIdentityToEmployee.cs" />
-    <Compile Remove="Data\Migrations\20210106105933_AddIdentityToEmployee.Designer.cs" />
-    <Compile Remove="Data\Migrations\20210106111225_AddIDIdentityToEmployee.cs" />
-    <Compile Remove="Data\Migrations\20210106111225_AddIDIdentityToEmployee.Designer.cs" />
-    <Compile Remove="Data\Migrations\20210106111851_AddIDIdentityTOEmployee.cs" />
-    <Compile Remove="Data\Migrations\20210106111851_AddIDIdentityTOEmployee.Designer.cs" />
-    <Compile Remove="Data\Migrations\20210106112105_AddIDIdentityTOEmployee.cs" />
-    <Compile Remove="Data\Migrations\20210106112105_AddIDIdentityTOEmployee.Designer.cs" />
-    <Compile Remove="Data\Migrations\20210106113716_AddKierownikBoolTOEmployee.cs" />
-    <Compile Remove="Data\Migrations\20210106113716_AddKierownikBoolTOEmployee.Designer.cs" />
-    <Compile Remove="Migrations\20210106114131_ASP_NETIdentityDataModel.cs" />
-    <Compile Remove="Migrations\20210106114131_ASP_NETIdentityDataModel.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.10" />
@@ -42,10 +19,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.10" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\Migrations\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

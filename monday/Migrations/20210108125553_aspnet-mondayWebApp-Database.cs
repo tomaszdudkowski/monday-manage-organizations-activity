@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace mondayWebApp.Migrations
 {
-    public partial class ASP_NETIdentityDataModel : Migration
+    public partial class aspnetmondayWebAppDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -225,7 +225,7 @@ namespace mondayWebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tasks",
+                name: "ProjectTasks",
                 columns: table => new
                 {
                     TaskID = table.Column<int>(nullable: false)
@@ -233,29 +233,29 @@ namespace mondayWebApp.Migrations
                     TaskName = table.Column<string>(nullable: true),
                     TaskDeadline = table.Column<DateTime>(nullable: false),
                     TaskCreatedByEmployeeID = table.Column<int>(nullable: true),
-                    TaskEmployeeResponsibleForEmployeeID = table.Column<int>(nullable: true),
                     ProjectID = table.Column<int>(nullable: true),
+                    EmployeeID = table.Column<int>(nullable: true),
                     IsEdited = table.Column<bool>(nullable: false),
                     IsChecked = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tasks", x => x.TaskID);
+                    table.PrimaryKey("PK_ProjectTasks", x => x.TaskID);
                     table.ForeignKey(
-                        name: "FK_Tasks_Projects_ProjectID",
+                        name: "FK_ProjectTasks_Employees_EmployeeID",
+                        column: x => x.EmployeeID,
+                        principalTable: "Employees",
+                        principalColumn: "EmployeeID",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_ProjectTasks_Projects_ProjectID",
                         column: x => x.ProjectID,
                         principalTable: "Projects",
                         principalColumn: "ProjectID",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK_Tasks_Employees_TaskCreatedByEmployeeID",
+                        name: "FK_ProjectTasks_Employees_TaskCreatedByEmployeeID",
                         column: x => x.TaskCreatedByEmployeeID,
-                        principalTable: "Employees",
-                        principalColumn: "EmployeeID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Tasks_Employees_TaskEmployeeResponsibleForEmployeeID",
-                        column: x => x.TaskEmployeeResponsibleForEmployeeID,
                         principalTable: "Employees",
                         principalColumn: "EmployeeID",
                         onDelete: ReferentialAction.Restrict);
@@ -381,19 +381,21 @@ namespace mondayWebApp.Migrations
                 column: "ProjectID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tasks_ProjectID",
-                table: "Tasks",
+                name: "IX_ProjectTasks_EmployeeID",
+                table: "ProjectTasks",
+                column: "EmployeeID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProjectTasks_ProjectID",
+                table: "ProjectTasks",
                 column: "ProjectID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tasks_TaskCreatedByEmployeeID",
-                table: "Tasks",
-                column: "TaskCreatedByEmployeeID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tasks_TaskEmployeeResponsibleForEmployeeID",
-                table: "Tasks",
-                column: "TaskEmployeeResponsibleForEmployeeID");
+                name: "IX_ProjectTasks_TaskCreatedByEmployeeID",
+                table: "ProjectTasks",
+                column: "TaskCreatedByEmployeeID",
+                unique: true,
+                filter: "[TaskCreatedByEmployeeID] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -417,7 +419,7 @@ namespace mondayWebApp.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Tasks");
+                name: "ProjectTasks");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

@@ -11,7 +11,7 @@ using mondayWebApp.Models;
 
 namespace mondayWebApp.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Superadmin, Admin")]
     public class DepartmentsController : Controller
     {
         private readonly ApplicationDbContext _context;

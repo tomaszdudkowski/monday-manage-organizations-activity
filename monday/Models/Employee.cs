@@ -24,6 +24,9 @@ namespace mondayWebApp.Models
         // Nawiguje do obiektu Address
         public virtual Address Address { get; set; }
 
+        // Nawiguje do obiektu ProjectTask
+        public virtual ProjectTask ProjectTask { get; set; }
+
         // Nawiguje do obiektu Department
         public int? DepartmentID { get; set; }
         public Department Department { get; set; }
@@ -31,6 +34,9 @@ namespace mondayWebApp.Models
         // Nawiguje do obiektu Project
         public int? ProjectID { get; set; }
         public Project Project { get; set; }
+
+        // Nawiguje do listy zadań
+        public ICollection<ProjectTask> ProjectTasks { get; set; }
 
         // Wskazuje czy kierownik
         public bool IsKierownik { get; set; }

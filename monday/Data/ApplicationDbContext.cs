@@ -18,7 +18,7 @@ namespace mondayWebApp.Data
         public DbSet<Department> Departments { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Project> Projects { get; set; }
-        public DbSet<Task> Tasks { get; set; }
+        public DbSet<ProjectTask> ProjectTasks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,6 +26,9 @@ namespace mondayWebApp.Data
 
             modelBuilder.Entity<Address>()
                 .HasKey(e => e.AddressID);
+
+            modelBuilder.Entity<Employee>()
+                .HasKey(e => e.EmployeeID);
 
             modelBuilder.Entity<Employee>()
                 .HasOne<Address>(p => p.EmployeeAddress)
@@ -44,11 +47,24 @@ namespace mondayWebApp.Data
                 .HasForeignKey(p => p.ProjectID)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            modelBuilder.Entity<Task>()
+            modelBuilder.Entity<ProjectTask>()
+                .HasKey(p => p.TaskID);
+
+            modelBuilder.Entity<ProjectTask>()
                 .HasOne<Project>(p => p.Project)
-                .WithMany(t => t.Tasks)
+                .WithMany(t => t.ProjectTasks)
                 .HasForeignKey(p => p.ProjectID)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<ProjectTask>()
+                .HasOne<Employee>(e => e.Employee)
+                .WithMany(p => p.ProjectTasks)
+                .HasForeignKey(e => e.EmployeeID)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<ProjectTask>()
+                .HasOne<Employee>(e => e.TaskCreatedBy)
+                .WithOne(p => p.ProjectTask);
         }
     }
 }
