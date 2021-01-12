@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,10 +14,12 @@ namespace mondayWebApp.Controllers
     public class ProjectTasksController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private UserManager<IdentityUser> userManager;
 
-        public ProjectTasksController(ApplicationDbContext context)
+        public ProjectTasksController(ApplicationDbContext context, UserManager<IdentityUser> userMgr)
         {
             _context = context;
+            userManager = userMgr;
         }
 
         // GET: ProjectTasks
@@ -49,8 +52,8 @@ namespace mondayWebApp.Controllers
         // GET: ProjectTasks/Create
         public IActionResult Create()
         {
-            ViewData["EmployeeID"] = new SelectList(_context.Employees, "EmployeeID", "EmployeeID");
-            ViewData["ProjectID"] = new SelectList(_context.Projects, "ProjectID", "ProjectID");
+            ViewData["EmployeeID"] = new SelectList(_context.Employees, "EmployeeID", "EmployeeNameSurname");
+            ViewData["ProjectID"] = new SelectList(_context.Projects, "ProjectID", "ProjectName");
             return View();
         }
 
@@ -63,12 +66,23 @@ namespace mondayWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                //if(!(User.IsInRole("Superadmin")))
+                //{
+                //    var user = await userManager.FindByNameAsync(User.Identity.Name);
+                //    var employeeUser = _context.Employees.Where(e => e.EmployeeUserID == user.Id);
+                //    Employee userU = null;
+                //    foreach (var item in employeeUser)
+                //    {
+                //        userU = item;
+                //    }
+                //    projectTask.TaskCreatedBy = userU;
+                //}
                 _context.Add(projectTask);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmployeeID"] = new SelectList(_context.Employees, "EmployeeID", "EmployeeID", projectTask.EmployeeID);
-            ViewData["ProjectID"] = new SelectList(_context.Projects, "ProjectID", "ProjectID", projectTask.ProjectID);
+            ViewData["EmployeeID"] = new SelectList(_context.Employees, "EmployeeID", "EmployeeName", projectTask.EmployeeID);
+            ViewData["ProjectID"] = new SelectList(_context.Projects, "ProjectID", "ProjectName", projectTask.ProjectID);
             return View(projectTask);
         }
 
@@ -85,8 +99,8 @@ namespace mondayWebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["EmployeeID"] = new SelectList(_context.Employees, "EmployeeID", "EmployeeID", projectTask.EmployeeID);
-            ViewData["ProjectID"] = new SelectList(_context.Projects, "ProjectID", "ProjectID", projectTask.ProjectID);
+            ViewData["EmployeeID"] = new SelectList(_context.Employees, "EmployeeID", "EmployeeNameSurname", projectTask.EmployeeID);
+            ViewData["ProjectID"] = new SelectList(_context.Projects, "ProjectID", "ProjectName", projectTask.ProjectID);
             return View(projectTask);
         }
 
@@ -122,8 +136,8 @@ namespace mondayWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmployeeID"] = new SelectList(_context.Employees, "EmployeeID", "EmployeeID", projectTask.EmployeeID);
-            ViewData["ProjectID"] = new SelectList(_context.Projects, "ProjectID", "ProjectID", projectTask.ProjectID);
+            ViewData["EmployeeID"] = new SelectList(_context.Employees, "EmployeeID", "EmployeeNameSurname", projectTask.EmployeeID);
+            ViewData["ProjectID"] = new SelectList(_context.Projects, "ProjectID", "ProjectName", projectTask.ProjectID);
             return View(projectTask);
         }
 

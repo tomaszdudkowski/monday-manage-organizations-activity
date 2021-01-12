@@ -28,7 +28,7 @@ namespace mondayWebApp.Controllers
         // GET: Employees
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Employees.Include(e => e.Department).Include(e => e.Project).Include(e => e.EmployeeRole);
+            var applicationDbContext = _context.Employees.Include(e => e.Department).Include(e => e.Project);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -78,7 +78,7 @@ namespace mondayWebApp.Controllers
         // POST: Employees/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeID,EmployeePassword,EmployeeEmail,EmployeeName,EmployeeSurname,EmployeeDateOfBirth,EmployeePhoneNumber,EmployeeRole,DepartmentID,ProjectID,IsEdited,IsChecked,IsKierownik")] Employee employee)
+        public async Task<IActionResult> Create([Bind("EmployeeID,EmployeeUserID,EmployeePassword,EmployeeEmail,EmployeeName,EmployeeSurname,EmployeeDateOfBirth,EmployeePhoneNumber,EmployeeRole,DepartmentID,ProjectID,IsEdited,IsChecked,IsKierownik")] Employee employee)
         {
 
             var user = new IdentityUser();
@@ -97,9 +97,10 @@ namespace mondayWebApp.Controllers
                 var result = await userManager.AddToRoleAsync(user, role.Name);
                 var TempUser = await userManager.FindByEmailAsync(user.Email);
                 employee.EmployeeUserID = TempUser.Id;
+                employee.EmployeeNameSurname = employee.EmployeeName + " " + employee.EmployeeSurname;
                 employee.EmployeePassword = "";
                 employee.EmployeeRole.Add(role);
-                _context.Add(employee);
+                await _context.AddAsync(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -213,7 +214,7 @@ namespace mondayWebApp.Controllers
             return View(employee);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Superadmin")]
         // GET: Employees/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -234,7 +235,7 @@ namespace mondayWebApp.Controllers
             return View(employee);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Superadmin")]
         // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

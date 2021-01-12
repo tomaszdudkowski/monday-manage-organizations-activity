@@ -4,31 +4,25 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Zadania</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Dodaj nowe zadanie</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.TaskName)
+                Nazwa zadania
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TaskDeadline)
+                Czas zakończenia zadania
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Project)
+                W projekcie
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Employee)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsEdited)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsChecked)
+                Pracownik
             </th>
             <th></th>
         </tr>
@@ -43,21 +37,15 @@
                 @Html.DisplayFor(modelItem => item.TaskDeadline)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Project.ProjectID)
+                @Html.DisplayFor(modelItem => item.Project.ProjectName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Employee.EmployeeID)
+                @Html.DisplayFor(modelItem => item.Employee.EmployeeNameSurname)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsEdited)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsChecked)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TaskID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TaskID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TaskID">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.TaskID">Edytuj</a> |
+                <a asp-action="Details" asp-route-id="@item.TaskID">Szczegóły</a> |
+                <a asp-action="Delete" asp-route-id="@item.TaskID">Usuń</a>
             </td>
         </tr>
 }

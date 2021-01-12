@@ -28,9 +28,6 @@ namespace mondayWebApp.Data
                 .HasKey(e => e.AddressID);
 
             modelBuilder.Entity<Employee>()
-                .HasKey(e => e.EmployeeID);
-
-            modelBuilder.Entity<Employee>()
                 .HasOne<Address>(p => p.EmployeeAddress)
                 .WithOne(r => r.Employee)
                 .HasForeignKey<Address>(s => s.EmployeeID);
@@ -61,10 +58,6 @@ namespace mondayWebApp.Data
                 .WithMany(p => p.ProjectTasks)
                 .HasForeignKey(e => e.EmployeeID)
                 .OnDelete(DeleteBehavior.SetNull);
-
-            modelBuilder.Entity<ProjectTask>()
-                .HasOne<Employee>(e => e.TaskCreatedBy)
-                .WithOne(p => p.ProjectTask);
         }
     }
 }

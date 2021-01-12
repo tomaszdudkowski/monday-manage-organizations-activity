@@ -16,16 +16,15 @@ namespace mondayWebApp.Models
         public string EmployeeCurrentPassword { get; set; }
         public string EmployeeName { get; set; }
         public string EmployeeSurname { get; set; }
+        public string EmployeeNameSurname { get; set; }
         public DateTime EmployeeDateOfBirth { get; set; }
         public Address EmployeeAddress { get; set; }
         public string EmployeePhoneNumber { get; set; }
+        [NotMapped]
         public List<IdentityRole> EmployeeRole { get; set; }
 
         // Nawiguje do obiektu Address
         public virtual Address Address { get; set; }
-
-        // Nawiguje do obiektu ProjectTask
-        public virtual ProjectTask ProjectTask { get; set; }
 
         // Nawiguje do obiektu Department
         public int? DepartmentID { get; set; }

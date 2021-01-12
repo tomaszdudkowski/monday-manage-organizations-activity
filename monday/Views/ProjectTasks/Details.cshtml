@@ -1,54 +1,41 @@
 ﻿@model mondayWebApp.Models.ProjectTask
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Szczegóły zadania";
 }
 
-<h1>Details</h1>
+<h1>Sczegóły zadania</h1>
 
 <div>
-    <h4>ProjectTask</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TaskName)
+            Nazwa zadania
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.TaskName)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TaskDeadline)
+            Data zakończenia zadania 
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.TaskDeadline)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Project)
+            Projekt
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Project.ProjectID)
+            @Html.DisplayFor(model => model.Project.ProjectName)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Employee)
+            Pracownik
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Employee.EmployeeID)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsEdited)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsEdited)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsChecked)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsChecked)
+            @Html.DisplayFor(model => model.Employee.EmployeeNameSurname)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.TaskID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.TaskID">Edytuj zadanie</a> |
+    <a asp-action="Index">Wróć do listy zadań</a>
 </div>

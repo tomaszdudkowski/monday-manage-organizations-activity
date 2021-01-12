@@ -1,54 +1,44 @@
 ﻿@model mondayWebApp.Models.ProjectTask
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Utwórz zadanie";
 }
 
-<h1>Create</h1>
+<h1>Utwórz zadanie</h1>
 
-<h4>ProjectTask</h4>
+<h4>Zadanie</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="TaskName" class="control-label"></label>
+                <label asp-for="TaskName" class="control-label">Nazwa zadania</label>
                 <input asp-for="TaskName" class="form-control" />
                 <span asp-validation-for="TaskName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TaskDeadline" class="control-label"></label>
+                <label asp-for="TaskDeadline" class="control-label">Data zakończenia zadania</label>
                 <input asp-for="TaskDeadline" class="form-control" />
                 <span asp-validation-for="TaskDeadline" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProjectID" class="control-label"></label>
+                <label asp-for="ProjectID" class="control-label">Projekt</label>
                 <select asp-for="ProjectID" class ="form-control" asp-items="ViewBag.ProjectID"></select>
             </div>
             <div class="form-group">
-                <label asp-for="EmployeeID" class="control-label"></label>
+                <label asp-for="EmployeeID" class="control-label">Pracownik</label>
                 <select asp-for="EmployeeID" class ="form-control" asp-items="ViewBag.EmployeeID"></select>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsEdited" /> @Html.DisplayNameFor(model => model.IsEdited)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsChecked" /> @Html.DisplayNameFor(model => model.IsChecked)
-                </label>
-            </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Utwórz" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Wróć do listy zadań</a>
 </div>
 
 @section Scripts {
