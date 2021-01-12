@@ -10,7 +10,7 @@ using mondayWebApp.Data;
 namespace mondayWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210112173758_asp_net_core_app_Monday_DB")]
+    [Migration("20210112180838_asp_net_core_app_Monday_DB")]
     partial class asp_net_core_app_Monday_DB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -320,6 +320,9 @@ namespace mondayWebApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EmployeePhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmployeeRole")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EmployeeSurname")

@@ -320,6 +320,9 @@ namespace mondayWebApp.Migrations
                     b.Property<string>("EmployeePhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EmployeeRole")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("EmployeeSurname")
                         .HasColumnType("nvarchar(max)");
 

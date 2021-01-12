@@ -20,8 +20,7 @@ namespace mondayWebApp.Models
         public DateTime EmployeeDateOfBirth { get; set; }
         public Address EmployeeAddress { get; set; }
         public string EmployeePhoneNumber { get; set; }
-        [NotMapped]
-        public List<IdentityRole> EmployeeRole { get; set; }
+        public string EmployeeRole { get; set; }
 
         // Nawiguje do obiektu Address
         public virtual Address Address { get; set; }

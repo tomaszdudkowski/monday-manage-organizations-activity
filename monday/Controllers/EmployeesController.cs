@@ -99,7 +99,7 @@ namespace mondayWebApp.Controllers
                 employee.EmployeeUserID = TempUser.Id;
                 employee.EmployeeNameSurname = employee.EmployeeName + " " + employee.EmployeeSurname;
                 employee.EmployeePassword = "";
-                employee.EmployeeRole.Add(role);
+                employee.EmployeeRole = role.Name;
                 await _context.AddAsync(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -190,7 +190,16 @@ namespace mondayWebApp.Controllers
                     if (roleId == Request.Form["EmployeeRole"])
                     {
                         var role = await roleManager.FindByIdAsync(roleId);
+                        var roleList = await userManager.GetRolesAsync(user);
+                        foreach (var roleItem in roleList)
+                        {
+                            if(roleItem != role.Name)
+                            {
+                                await userManager.RemoveFromRoleAsync(user, roleItem);
+                            }
+                        }
                         var result = await userManager.AddToRoleAsync(user, role.Name);
+                        employee.EmployeeRole = role.Name;
                         employee.EmployeePassword = "";
                         _context.Update(employee);
                         await _context.SaveChangesAsync();
