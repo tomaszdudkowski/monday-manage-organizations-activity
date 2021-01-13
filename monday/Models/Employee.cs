@@ -25,6 +25,9 @@ namespace mondayWebApp.Models
         // Nawiguje do obiektu Address
         public virtual Address Address { get; set; }
 
+        // Nawiguje do DepartmentManager
+        public Department DepartmentManager { get; set; }
+
         // Nawiguje do obiektu Department
         public int? DepartmentID { get; set; }
         public Department Department { get; set; }

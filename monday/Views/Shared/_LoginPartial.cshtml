@@ -9,10 +9,13 @@
         @if (User.IsInRole("Superadmin") || User.IsInRole("Admin"))
         {
             <a class="nav-link text-dark" asp-controller="Employees" asp-action="Index">Pracownicy</a>
+        }
+
+        @if (User.IsInRole("Admin"))
+        {
             <a class="nav-link text-dark" asp-controller="Departments" asp-action="Index">Działy</a>
             <a class="nav-link text-dark" asp-controller="Projects" asp-action="Index">Projekty</a>
             <a class="nav-link text-dark" asp-controller="ProjectTasks" asp-action="Index">Zadania</a>
-
         }
 
         @if (User.IsInRole("Superadmin"))

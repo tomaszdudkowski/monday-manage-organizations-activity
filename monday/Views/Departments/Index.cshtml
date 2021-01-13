@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<mondayWebApp.Models.Department>
 
 @{
-    ViewData["Title"] = "Działy firmy";
+    ViewData["Title"] = "Działy";
 }
 
-<h1>Działy firmy</h1>
+<h1>Działy</h1>
 
 <p>
     <a asp-action="Create">Utwórz nowy dział</a>
@@ -15,6 +15,9 @@
             <th>
                 Nazwa działu
             </th>
+            <th>
+                Kierownik działu
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -23,6 +26,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.DepartmentName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DepartmentManager.EmployeeNameSurname)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.DepartmentID">Edytuj</a> |

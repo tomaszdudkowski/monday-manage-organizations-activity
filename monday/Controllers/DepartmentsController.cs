@@ -24,7 +24,8 @@ namespace mondayWebApp.Controllers
         // GET: Departments
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Departments.ToListAsync());
+            var applicationDbContext = _context.Departments.Include(d => d.DepartmentManager);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Departments/Details/5
@@ -36,6 +37,7 @@ namespace mondayWebApp.Controllers
             }
 
             var department = await _context.Departments
+                .Include(d => d.DepartmentManager)
                 .FirstOrDefaultAsync(m => m.DepartmentID == id);
             if (department == null)
             {
@@ -48,6 +50,8 @@ namespace mondayWebApp.Controllers
         // GET: Departments/Create
         public IActionResult Create()
         {
+            var emplAdminList = _context.Employees.Where(e => e.EmployeeRole == "Admin").Select(e => e);
+            ViewData["DepartmentManagerID"] = new SelectList(emplAdminList, "EmployeeID", "EmployeeNameSurname");
             return View();
         }
 
@@ -56,17 +60,23 @@ namespace mondayWebApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DepartmentID,DepartmentName,DepartmentDesc,DepartmentEstablishmentDate,IsEdited,IsChecked")] Department department)
+        public async Task<IActionResult> Create([Bind("DepartmentID,DepartmentName,DepartmentDesc,DepartmentEstablishmentDate,DepartmentManagerID,IsEdited,IsChecked")] Department department)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(department);
                 await _context.SaveChangesAsync();
+                var employeeManager = _context.Employees.Where(e => e.DepartmentManager.DepartmentManagerID == department.DepartmentManagerID).Single();
+                employeeManager.IsKierownik = true;
+                _context.Employees.Update(employeeManager);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            var emplAdminList = _context.Employees.Where(e => e.EmployeeRole == "Admin").Select(e => e);
+            ViewData["DepartmentManagerID"] = new SelectList(emplAdminList, "EmployeeID", "EmployeeNameSurname");
             return View(department);
         }
-
+        private static int? TempData { get; set; }
         // GET: Departments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -76,10 +86,13 @@ namespace mondayWebApp.Controllers
             }
 
             var department = await _context.Departments.FindAsync(id);
+            TempData = department.DepartmentManagerID;
             if (department == null)
             {
                 return NotFound();
             }
+            var emplAdminList = _context.Employees.Where(e => e.EmployeeRole == "Admin").Select(e => e);
+            ViewData["DepartmentManagerID"] = new SelectList(emplAdminList, "EmployeeID", "EmployeeNameSurname");
             return View(department);
         }
 
@@ -88,18 +101,25 @@ namespace mondayWebApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DepartmentID,DepartmentName,DepartmentDesc,DepartmentEstablishmentDate,IsEdited,IsChecked")] Department department)
+        public async Task<IActionResult> Edit(int id, [Bind("DepartmentID,DepartmentName,DepartmentDesc,DepartmentEstablishmentDate,DepartmentManagerID,IsEdited,IsChecked")] Department department)
         {
             if (id != department.DepartmentID)
             {
                 return NotFound();
             }
-
+            var oldEmployeeManager = _context.Employees.Where(e => e.EmployeeID == TempData).Single();
+            oldEmployeeManager.IsKierownik = false;
+            _context.Employees.Update(oldEmployeeManager);
+            await _context.SaveChangesAsync();
             if (ModelState.IsValid)
             {
                 try
                 {
                     _context.Update(department);
+                    await _context.SaveChangesAsync();
+                    var employeeManager = _context.Employees.Where(e => e.DepartmentManager.DepartmentManagerID == department.DepartmentManagerID).Single();
+                    employeeManager.IsKierownik = true;
+                    _context.Employees.Update(employeeManager);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -115,6 +135,8 @@ namespace mondayWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            var emplAdminList = _context.Employees.Where(e => e.EmployeeRole == "Admin").Select(e => e);
+            ViewData["DepartmentManagerID"] = new SelectList(emplAdminList, "EmployeeID", "EmployeeNameSurname");
             return View(department);
         }
 
@@ -127,6 +149,7 @@ namespace mondayWebApp.Controllers
             }
 
             var department = await _context.Departments
+                .Include(d => d.DepartmentManager)
                 .FirstOrDefaultAsync(m => m.DepartmentID == id);
             if (department == null)
             {
@@ -142,6 +165,10 @@ namespace mondayWebApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var department = await _context.Departments.FindAsync(id);
+            var employeeManager = _context.Employees.Where(e => e.DepartmentManager.DepartmentManagerID == department.DepartmentManagerID).Single();
+            employeeManager.IsKierownik = false;
+            _context.Employees.Update(employeeManager);
+            await _context.SaveChangesAsync();
             _context.Departments.Remove(department);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

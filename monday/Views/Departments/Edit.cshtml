@@ -1,11 +1,12 @@
 ﻿@model mondayWebApp.Models.Department
 
 @{
-    ViewData["Title"] = "Edycja działu";
+    ViewData["Title"] = "Edytuj dział";
 }
 
 <h1>Edytuj dział</h1>
 
+<h4>Dział</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -23,9 +24,14 @@
                 <span asp-validation-for="DepartmentDesc" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DepartmentEstablishmentDate" class="control-label">Data powstania działu</label>
+                <label asp-for="DepartmentEstablishmentDate" class="control-label">Data utworzenia działu</label>
                 <input asp-for="DepartmentEstablishmentDate" class="form-control" />
                 <span asp-validation-for="DepartmentEstablishmentDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DepartmentManagerID" class="control-label">Kierownik działu</label>
+                <select asp-for="DepartmentManagerID" class="form-control" asp-items="ViewBag.DepartmentManagerID"></select>
+                <span asp-validation-for="DepartmentManagerID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Zapisz zmiany" class="btn btn-primary" />

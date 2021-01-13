@@ -39,6 +39,11 @@ namespace mondayWebApp.Data
                 .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Employee>()
+                .HasOne<Department>(e => e.DepartmentManager)
+                .WithOne(d => d.DepartmentManager)
+                .HasForeignKey<Department>(s => s.DepartmentManagerID);
+
+            modelBuilder.Entity<Employee>()
                 .HasOne<Project>(p => p.Project)
                 .WithMany(e => e.Employees)
                 .HasForeignKey(p => p.ProjectID)

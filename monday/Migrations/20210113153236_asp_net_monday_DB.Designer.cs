@@ -10,8 +10,8 @@ using mondayWebApp.Data;
 namespace mondayWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210112180838_asp_net_core_app_Monday_DB")]
-    partial class asp_net_core_app_Monday_DB
+    [Migration("20210113153236_asp_net_monday_DB")]
+    partial class asp_net_monday_DB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -280,6 +280,9 @@ namespace mondayWebApp.Migrations
                     b.Property<DateTime>("DepartmentEstablishmentDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("DepartmentManagerID")
+                        .HasColumnType("int");
+
                     b.Property<string>("DepartmentName")
                         .HasColumnType("nvarchar(max)");
 
@@ -290,6 +293,10 @@ namespace mondayWebApp.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("DepartmentID");
+
+                    b.HasIndex("DepartmentManagerID")
+                        .IsUnique()
+                        .HasFilter("[DepartmentManagerID] IS NOT NULL");
 
                     b.ToTable("Departments");
                 });
@@ -302,9 +309,6 @@ namespace mondayWebApp.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("DepartmentID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("DepartmentID1")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EmployeeDateOfBirth")
@@ -346,10 +350,6 @@ namespace mondayWebApp.Migrations
                     b.HasKey("EmployeeID");
 
                     b.HasIndex("DepartmentID");
-
-                    b.HasIndex("DepartmentID1")
-                        .IsUnique()
-                        .HasFilter("[DepartmentID1] IS NOT NULL");
 
                     b.HasIndex("ProjectID");
 
@@ -489,16 +489,19 @@ namespace mondayWebApp.Migrations
                         .HasForeignKey("mondayWebApp.Models.Address", "EmployeeID1");
                 });
 
+            modelBuilder.Entity("mondayWebApp.Models.Department", b =>
+                {
+                    b.HasOne("mondayWebApp.Models.Employee", "DepartmentManager")
+                        .WithOne("DepartmentManager")
+                        .HasForeignKey("mondayWebApp.Models.Department", "DepartmentManagerID");
+                });
+
             modelBuilder.Entity("mondayWebApp.Models.Employee", b =>
                 {
                     b.HasOne("mondayWebApp.Models.Department", "Department")
                         .WithMany("Employees")
                         .HasForeignKey("DepartmentID")
                         .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("mondayWebApp.Models.Department", null)
-                        .WithOne("DepartmentManager")
-                        .HasForeignKey("mondayWebApp.Models.Employee", "DepartmentID1");
 
                     b.HasOne("mondayWebApp.Models.Project", "Project")
                         .WithMany("Employees")

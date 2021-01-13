@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace mondayWebApp.Migrations
 {
-    public partial class asp_net_core_app_Monday_DB : Migration
+    public partial class asp_net_monday_DB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,23 +44,6 @@ namespace mondayWebApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Departments",
-                columns: table => new
-                {
-                    DepartmentID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DepartmentName = table.Column<string>(nullable: true),
-                    DepartmentDesc = table.Column<string>(nullable: true),
-                    DepartmentEstablishmentDate = table.Column<DateTime>(nullable: false),
-                    IsEdited = table.Column<bool>(nullable: false),
-                    IsChecked = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Departments", x => x.DepartmentID);
                 });
 
             migrationBuilder.CreateTable(
@@ -205,24 +188,11 @@ namespace mondayWebApp.Migrations
                     ProjectID = table.Column<int>(nullable: true),
                     IsKierownik = table.Column<bool>(nullable: false),
                     IsEdited = table.Column<bool>(nullable: false),
-                    IsChecked = table.Column<bool>(nullable: false),
-                    DepartmentID1 = table.Column<int>(nullable: true)
+                    IsChecked = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employees", x => x.EmployeeID);
-                    table.ForeignKey(
-                        name: "FK_Employees_Departments_DepartmentID",
-                        column: x => x.DepartmentID,
-                        principalTable: "Departments",
-                        principalColumn: "DepartmentID",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Employees_Departments_DepartmentID1",
-                        column: x => x.DepartmentID1,
-                        principalTable: "Departments",
-                        principalColumn: "DepartmentID",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Employees_Projects_ProjectID",
                         column: x => x.ProjectID,
@@ -259,6 +229,30 @@ namespace mondayWebApp.Migrations
                     table.ForeignKey(
                         name: "FK_Addresses_Employees_EmployeeID1",
                         column: x => x.EmployeeID1,
+                        principalTable: "Employees",
+                        principalColumn: "EmployeeID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Departments",
+                columns: table => new
+                {
+                    DepartmentID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DepartmentName = table.Column<string>(nullable: true),
+                    DepartmentDesc = table.Column<string>(nullable: true),
+                    DepartmentEstablishmentDate = table.Column<DateTime>(nullable: false),
+                    DepartmentManagerID = table.Column<int>(nullable: true),
+                    IsEdited = table.Column<bool>(nullable: false),
+                    IsChecked = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Departments", x => x.DepartmentID);
+                    table.ForeignKey(
+                        name: "FK_Departments_Employees_DepartmentManagerID",
+                        column: x => x.DepartmentManagerID,
                         principalTable: "Employees",
                         principalColumn: "EmployeeID",
                         onDelete: ReferentialAction.Restrict);
@@ -354,16 +348,16 @@ namespace mondayWebApp.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Departments_DepartmentManagerID",
+                table: "Departments",
+                column: "DepartmentManagerID",
+                unique: true,
+                filter: "[DepartmentManagerID] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Employees_DepartmentID",
                 table: "Employees",
                 column: "DepartmentID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Employees_DepartmentID1",
-                table: "Employees",
-                column: "DepartmentID1",
-                unique: true,
-                filter: "[DepartmentID1] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_ProjectID",
@@ -384,10 +378,22 @@ namespace mondayWebApp.Migrations
                 name: "IX_ProjectTasks_TaskCreatedByEmployeeID",
                 table: "ProjectTasks",
                 column: "TaskCreatedByEmployeeID");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Employees_Departments_DepartmentID",
+                table: "Employees",
+                column: "DepartmentID",
+                principalTable: "Departments",
+                principalColumn: "DepartmentID",
+                onDelete: ReferentialAction.SetNull);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Departments_Employees_DepartmentManagerID",
+                table: "Departments");
+
             migrationBuilder.DropTable(
                 name: "Addresses");
 

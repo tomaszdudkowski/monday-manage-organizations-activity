@@ -11,7 +11,10 @@ namespace mondayWebApp.Models
         public string DepartmentName { get; set; }
         public string DepartmentDesc { get; set; }
         public DateTime DepartmentEstablishmentDate { get; set; }
-        public  Employee DepartmentManager { get; set; }
+
+        // Nawiguje do DepartmentManager
+        public int? DepartmentManagerID { get; set; }
+        public Employee DepartmentManager { get; set; }
 
         // Pracownicy działu
         public ICollection<Employee> Employees { get; set; }
