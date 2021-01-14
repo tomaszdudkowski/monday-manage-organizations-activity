@@ -116,25 +116,38 @@ namespace mondayWebApp.Controllers
                 return NotFound();
             }
 
-            if(project.ProjectManagerID == null)
-            {
-                var oldEmployeeManager = _context.Employees.Where(e => e.EmployeeID == TempBox).Single();
-                oldEmployeeManager.IsProjectManager = false;
-                _context.Employees.Update(oldEmployeeManager);
-                await _context.SaveChangesAsync();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(project);
-                    await _context.SaveChangesAsync();
-                    var employeeManager = _context.Employees.Where(e => e.ProjectManager.ProjectManagerID == project.ProjectManagerID).Single();
-                    employeeManager.IsProjectManager = true;
-                    employeeManager.ProjectID = project.ProjectID;
-                    _context.Employees.Update(employeeManager);
-                    await _context.SaveChangesAsync();
+                    if (project.ProjectManagerID != null)
+                    {
+                        if(TempBox == null) // Edycja po usunięciu kierownika projektu
+                        {
+                            _context.Update(project);
+                            await _context.SaveChangesAsync();
+                            var employeeManager = _context.Employees.Where(e => e.ProjectManager.ProjectManagerID == project.ProjectManagerID).Single();
+                            employeeManager.IsProjectManager = true;
+                            employeeManager.ProjectID = project.ProjectID;
+                            _context.Employees.Update(employeeManager);
+                            await _context.SaveChangesAsync();
+                            return RedirectToAction(nameof(Index));
+                        } else if(TempBox != null) // Tylko edytujemy
+                        {
+                            var oldEmployeeManager = _context.Employees.Where(e => e.EmployeeID == TempBox).Single();
+                            oldEmployeeManager.IsProjectManager = false;
+                            _context.Employees.Update(oldEmployeeManager);
+                            await _context.SaveChangesAsync();
+                            _context.Update(project);
+                            await _context.SaveChangesAsync();
+                            var employeeManager = _context.Employees.Where(e => e.ProjectManager.ProjectManagerID == project.ProjectManagerID).Single();
+                            employeeManager.IsProjectManager = true;
+                            employeeManager.ProjectID = project.ProjectID;
+                            _context.Employees.Update(employeeManager);
+                            await _context.SaveChangesAsync();
+                            return RedirectToAction(nameof(Index));
+                        }
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {

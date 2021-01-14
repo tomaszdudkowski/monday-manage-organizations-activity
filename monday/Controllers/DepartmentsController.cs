@@ -126,6 +126,13 @@ namespace mondayWebApp.Controllers
             {
                 try
                 {
+                    if(department.DepartmentManagerID != null)
+                    {
+                        var oldEmployeeManager = _context.Employees.Where(e => e.EmployeeID == TempBox).Single();
+                        oldEmployeeManager.IsDepartmentManager = false;
+                        _context.Employees.Update(oldEmployeeManager);
+                        await _context.SaveChangesAsync();
+                    }
                     _context.Update(department);
                     await _context.SaveChangesAsync();
                     var employeeManager = _context.Employees.Where(e => e.DepartmentManager.DepartmentManagerID == department.DepartmentManagerID).Single();
