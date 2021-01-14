@@ -64,6 +64,11 @@ namespace mondayWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                bool isDepartmentManagerInDB = _context.Departments.Where(d => d.DepartmentManagerID == department.DepartmentManagerID).Any();
+                if(isDepartmentManagerInDB == true)
+                {
+                    return RedirectToAction("Error", "Home");
+                }
                 _context.Add(department);
                 await _context.SaveChangesAsync();
                 var employeeManager = _context.Employees.Where(e => e.DepartmentManager.DepartmentManagerID == department.DepartmentManagerID).Single();
