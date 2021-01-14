@@ -13,6 +13,10 @@ namespace mondayWebApp.Models
         public string ProjectBrief { get; set; }
         public DateTime ProjectDeadline { get; set; }
 
+        // Nawiguje do ProjectManager
+        public int? ProjectManagerID { get; set; }
+        public Employee ProjectManager { get; set; }
+
         // Nawiguje do zadań projektu
         public ICollection<ProjectTask> ProjectTasks { get; set; }
 

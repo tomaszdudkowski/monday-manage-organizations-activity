@@ -28,6 +28,9 @@ namespace mondayWebApp.Models
         // Nawiguje do DepartmentManager
         public Department DepartmentManager { get; set; }
 
+        // Nawiguje do ProjectManager
+        public Project ProjectManager { get; set; }
+
         // Nawiguje do obiektu Department
         public int? DepartmentID { get; set; }
         public Department Department { get; set; }
@@ -39,8 +42,11 @@ namespace mondayWebApp.Models
         // Nawiguje do listy zadań
         public ICollection<ProjectTask> ProjectTasks { get; set; }
 
-        // Wskazuje czy kierownik
-        public bool IsKierownik { get; set; }
+        // Wskazuje czy kierownik działu
+        public bool IsDepartmentManager { get; set; }
+
+        // Wskazuje czy kierownik projektu
+        public bool IsProjectManager { get; set; }
 
         // Blokuje rekord przed edycją
         public bool IsEdited { get; set; }

@@ -44,6 +44,11 @@ namespace mondayWebApp.Data
                 .HasForeignKey<Department>(s => s.DepartmentManagerID);
 
             modelBuilder.Entity<Employee>()
+                .HasOne<Project>(e => e.ProjectManager)
+                .WithOne(p => p.ProjectManager)
+                .HasForeignKey<Project>(s => s.ProjectManagerID);
+
+            modelBuilder.Entity<Employee>()
                 .HasOne<Project>(p => p.Project)
                 .WithMany(e => e.Employees)
                 .HasForeignKey(p => p.ProjectID)

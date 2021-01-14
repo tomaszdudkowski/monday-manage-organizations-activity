@@ -6,9 +6,8 @@
 
 <h1>Usuń projekt</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Czy na pewno chcesz usunąć projekt ?</h3>
 <div>
-    <h4>Project</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -30,11 +29,17 @@
             @Html.DisplayFor(model => model.ProjectBrief)
         </dd>
         <dt class = "col-sm-2">
-            Czas zakończenia projektu
+            Data zakończenia projektu
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.ProjectDeadline)
         </dd>
+        <dt class = "col-sm-2">
+            Kierownik projektu
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ProjectManager.EmployeeNameSurname)
+        </dd class>
     </dl>
     
     <form asp-action="Delete">

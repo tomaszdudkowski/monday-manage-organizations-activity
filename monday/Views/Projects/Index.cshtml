@@ -16,13 +16,7 @@
                 Nazwa projektu
             </th>
             <th>
-                Opis projektu
-            </th>
-            <th>
-                Założenia projektu
-            </th>
-            <th>
-                Data zakończenia projektu
+                Kierownik pojektu
             </th>
             <th></th>
         </tr>
@@ -34,13 +28,7 @@
                 @Html.DisplayFor(modelItem => item.ProjectName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProjectDesc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProjectBrief)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProjectDeadline)
+                @Html.DisplayFor(modelItem => item.ProjectManager.EmployeeNameSurname)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ProjectID">Edytuj</a> |

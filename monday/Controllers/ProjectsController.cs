@@ -22,7 +22,8 @@ namespace mondayWebApp.Controllers
         // GET: Projects
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Projects.ToListAsync());
+            var applicationDbContext = _context.Projects.Include(p => p.ProjectManager);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Projects/Details/5
@@ -34,6 +35,7 @@ namespace mondayWebApp.Controllers
             }
 
             var project = await _context.Projects
+                .Include(p => p.ProjectManager)
                 .FirstOrDefaultAsync(m => m.ProjectID == id);
             if (project == null)
             {
@@ -46,6 +48,7 @@ namespace mondayWebApp.Controllers
         // GET: Projects/Create
         public IActionResult Create()
         {
+            ViewData["ProjectManagerID"] = new SelectList(_context.Employees, "EmployeeID", "EmployeeNameSurname");
             return View();
         }
 
@@ -54,7 +57,7 @@ namespace mondayWebApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProjectID,ProjectName,ProjectDesc,ProjectBrief,ProjectDeadline,IsEdited,IsChecked")] Project project)
+        public async Task<IActionResult> Create([Bind("ProjectID,ProjectName,ProjectDesc,ProjectBrief,ProjectDeadline,ProjectManagerID,IsEdited,IsChecked")] Project project)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +65,7 @@ namespace mondayWebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ProjectManagerID"] = new SelectList(_context.Employees, "EmployeeID", "EmployeeNameSurname", project.ProjectManagerID);
             return View(project);
         }
 
@@ -78,6 +82,7 @@ namespace mondayWebApp.Controllers
             {
                 return NotFound();
             }
+            ViewData["ProjectManagerID"] = new SelectList(_context.Employees, "EmployeeID", "EmployeeNameSurname", project.ProjectManagerID);
             return View(project);
         }
 
@@ -86,7 +91,7 @@ namespace mondayWebApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProjectID,ProjectName,ProjectDesc,ProjectBrief,ProjectDeadline,IsEdited,IsChecked")] Project project)
+        public async Task<IActionResult> Edit(int id, [Bind("ProjectID,ProjectName,ProjectDesc,ProjectBrief,ProjectDeadline,ProjectManagerID,IsEdited,IsChecked")] Project project)
         {
             if (id != project.ProjectID)
             {
@@ -113,6 +118,7 @@ namespace mondayWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ProjectManagerID"] = new SelectList(_context.Employees, "EmployeeID", "EmployeeNameSurname", project.ProjectManagerID);
             return View(project);
         }
 
@@ -125,6 +131,7 @@ namespace mondayWebApp.Controllers
             }
 
             var project = await _context.Projects
+                .Include(p => p.ProjectManager)
                 .FirstOrDefaultAsync(m => m.ProjectID == id);
             if (project == null)
             {

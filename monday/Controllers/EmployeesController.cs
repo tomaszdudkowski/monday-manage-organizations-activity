@@ -78,7 +78,7 @@ namespace mondayWebApp.Controllers
         // POST: Employees/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeID,EmployeeUserID,EmployeePassword,EmployeeEmail,EmployeeName,EmployeeSurname,EmployeeDateOfBirth,EmployeePhoneNumber,EmployeeRole,DepartmentID,ProjectID,IsEdited,IsChecked,IsKierownik")] Employee employee)
+        public async Task<IActionResult> Create([Bind("EmployeeID,EmployeeUserID,EmployeePassword,EmployeeEmail,EmployeeName,EmployeeSurname,EmployeeDateOfBirth,EmployeePhoneNumber,EmployeeRole,DepartmentID,ProjectID,IsEdited,IsChecked,IsDepartmentManager")] Employee employee)
         {
 
             var user = new IdentityUser();
@@ -159,7 +159,7 @@ namespace mondayWebApp.Controllers
         // POST: Employees/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("EmployeeID,EmployeePassword,EmployeeCurrentPassword,EmployeeEmail,EmployeeName,EmployeeSurname,EmployeeDateOfBirth,EmployeePhoneNumber,EmployeeRole,DepartmentID,ProjectID,IsEdited,IsChecked,IsKierownik,EmployeeUserID")] Employee employee)
+        public async Task<IActionResult> Edit(string id, [Bind("EmployeeID,EmployeePassword,EmployeeCurrentPassword,EmployeeEmail,EmployeeName,EmployeeSurname,EmployeeDateOfBirth,EmployeePhoneNumber,EmployeeRole,DepartmentID,ProjectID,IsEdited,IsChecked,IsDepartmentManager,EmployeeUserID")] Employee employee)
         {
 
             if (id.Equals(employee.EmployeeID))
@@ -253,10 +253,11 @@ namespace mondayWebApp.Controllers
             var employee = await _context.Employees.FindAsync(id);
             var user = await userManager.FindByIdAsync(employee.EmployeeUserID);
             IdentityResult identityResult = await userManager.DeleteAsync(user);
-            var departmentManger = await _context.Departments.Where(d => d.DepartmentManagerID == employee.DepartmentManager.DepartmentManagerID).Select(d => d).SingleAsync();
+            var departmentManger = await _context.Departments.Where(d => d.DepartmentManagerID == employee.EmployeeID).Select(d => d).SingleAsync();
             departmentManger.DepartmentManager = null;
             departmentManger.DepartmentManagerID = null;
             _context.Departments.Update(departmentManger);
+            await _context.SaveChangesAsync();
             _context.Employees.Remove(employee);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

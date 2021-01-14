@@ -72,7 +72,8 @@ namespace mondayWebApp.Controllers
                 _context.Add(department);
                 await _context.SaveChangesAsync();
                 var employeeManager = _context.Employees.Where(e => e.DepartmentManager.DepartmentManagerID == department.DepartmentManagerID).Single();
-                employeeManager.IsKierownik = true;
+                employeeManager.IsDepartmentManager = true;
+                employeeManager.DepartmentID = department.DepartmentID;
                 _context.Employees.Update(employeeManager);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -112,10 +113,15 @@ namespace mondayWebApp.Controllers
             {
                 return NotFound();
             }
-            var oldEmployeeManager = _context.Employees.Where(e => e.EmployeeID == TempData).Single();
-            oldEmployeeManager.IsKierownik = false;
-            _context.Employees.Update(oldEmployeeManager);
-            await _context.SaveChangesAsync();
+            
+            if(department.DepartmentManagerID == null)
+            {
+                var oldEmployeeManager = _context.Employees.Where(e => e.EmployeeID == TempData).Single();
+                oldEmployeeManager.IsDepartmentManager = false;
+                _context.Employees.Update(oldEmployeeManager);
+                await _context.SaveChangesAsync();
+            }
+            
             if (ModelState.IsValid)
             {
                 try
@@ -123,7 +129,8 @@ namespace mondayWebApp.Controllers
                     _context.Update(department);
                     await _context.SaveChangesAsync();
                     var employeeManager = _context.Employees.Where(e => e.DepartmentManager.DepartmentManagerID == department.DepartmentManagerID).Single();
-                    employeeManager.IsKierownik = true;
+                    employeeManager.IsDepartmentManager = true;
+                    employeeManager.DepartmentID = department.DepartmentID;
                     _context.Employees.Update(employeeManager);
                     await _context.SaveChangesAsync();
                 }
@@ -171,7 +178,7 @@ namespace mondayWebApp.Controllers
         {
             var department = await _context.Departments.FindAsync(id);
             var employeeManager = _context.Employees.Where(e => e.DepartmentManager.DepartmentManagerID == department.DepartmentManagerID).Single();
-            employeeManager.IsKierownik = false;
+            employeeManager.IsDepartmentManager = false;
             _context.Employees.Update(employeeManager);
             await _context.SaveChangesAsync();
             _context.Departments.Remove(department);

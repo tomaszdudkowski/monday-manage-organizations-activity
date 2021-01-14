@@ -4,10 +4,10 @@
     ViewData["Title"] = "Szczegóły projektu";
 }
 
-<h1>Szczegóły projektu</h1>
+<h1>Szczegóły</h1>
 
 <div>
-    <h4>Project</h4>
+    <h4>Projekt</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -33,6 +33,12 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.ProjectDeadline)
+        </dd>
+        <dt class = "col-sm-2">
+            Kierownik projektu
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ProjectManager.EmployeeNameSurname)
         </dd>
     </dl>
 </div>

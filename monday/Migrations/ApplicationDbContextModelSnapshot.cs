@@ -336,10 +336,13 @@ namespace mondayWebApp.Migrations
                     b.Property<bool>("IsChecked")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsDepartmentManager")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsEdited")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsKierownik")
+                    b.Property<bool>("IsProjectManager")
                         .HasColumnType("bit");
 
                     b.Property<int?>("ProjectID")
@@ -376,10 +379,17 @@ namespace mondayWebApp.Migrations
                     b.Property<string>("ProjectDesc")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ProjectManagerID")
+                        .HasColumnType("int");
+
                     b.Property<string>("ProjectName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProjectID");
+
+                    b.HasIndex("ProjectManagerID")
+                        .IsUnique()
+                        .HasFilter("[ProjectManagerID] IS NOT NULL");
 
                     b.ToTable("Projects");
                 });
@@ -505,6 +515,13 @@ namespace mondayWebApp.Migrations
                         .WithMany("Employees")
                         .HasForeignKey("ProjectID")
                         .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("mondayWebApp.Models.Project", b =>
+                {
+                    b.HasOne("mondayWebApp.Models.Employee", "ProjectManager")
+                        .WithOne("ProjectManager")
+                        .HasForeignKey("mondayWebApp.Models.Project", "ProjectManagerID");
                 });
 
             modelBuilder.Entity("mondayWebApp.Models.ProjectTask", b =>

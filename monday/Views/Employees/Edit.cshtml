@@ -53,10 +53,13 @@
                 <label asp-for="EmployeeRole" class="control-label">Rola</label>
                 <select asp-for="EmployeeRole" class="form-control" asp-items="ViewBag.EmployeeRole"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="DepartmentID" class="control-label">Oddział</label>
-                <select asp-for="DepartmentID" class="form-control" asp-items="ViewBag.DepartmentID"></select>
-            </div>
+            @if (Model.IsDepartmentManager == false)
+            {
+                <div class="form-group">
+                    <label asp-for="DepartmentID" class="control-label">Oddział</label>
+                    <select asp-for="DepartmentID" class="form-control" asp-items="ViewBag.DepartmentID"></select>
+                </div>
+            }
             <div class="form-group">
                 <label asp-for="ProjectID" class="control-label">Projekt</label>
                 <select asp-for="ProjectID" class="form-control" asp-items="ViewBag.ProjectID"></select>
