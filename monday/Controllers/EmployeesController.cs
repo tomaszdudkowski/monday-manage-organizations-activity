@@ -253,11 +253,22 @@ namespace mondayWebApp.Controllers
             var employee = await _context.Employees.FindAsync(id);
             var user = await userManager.FindByIdAsync(employee.EmployeeUserID);
             IdentityResult identityResult = await userManager.DeleteAsync(user);
-            var departmentManger = await _context.Departments.Where(d => d.DepartmentManagerID == employee.EmployeeID).Select(d => d).SingleAsync();
-            departmentManger.DepartmentManager = null;
-            departmentManger.DepartmentManagerID = null;
-            _context.Departments.Update(departmentManger);
-            await _context.SaveChangesAsync();
+            if(employee.IsDepartmentManager == true)
+            {
+                var departmentManger = await _context.Departments.Where(d => d.DepartmentManagerID == employee.EmployeeID).Select(d => d).SingleAsync();
+                departmentManger.DepartmentManager = null;
+                departmentManger.DepartmentManagerID = null;
+                _context.Departments.Update(departmentManger);
+                await _context.SaveChangesAsync();
+            }
+            if(employee.IsProjectManager == true)
+            {
+                var projectManager = await _context.Projects.Where(p => p.ProjectManagerID == employee.EmployeeID).Select(p => p).SingleAsync();
+                projectManager.ProjectManager = null;
+                projectManager.ProjectManagerID = null;
+                _context.Projects.Update(projectManager);
+                await _context.SaveChangesAsync();
+            }
             _context.Employees.Remove(employee);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

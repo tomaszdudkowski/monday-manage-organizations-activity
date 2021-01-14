@@ -82,7 +82,7 @@ namespace mondayWebApp.Controllers
             ViewData["DepartmentManagerID"] = new SelectList(emplAdminList, "EmployeeID", "EmployeeNameSurname");
             return View(department);
         }
-        private static int? TempData { get; set; }
+        private static int? TempBox { get; set; }
         // GET: Departments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -92,7 +92,7 @@ namespace mondayWebApp.Controllers
             }
 
             var department = await _context.Departments.FindAsync(id);
-            TempData = department.DepartmentManagerID;
+            TempBox = department.DepartmentManagerID;
             if (department == null)
             {
                 return NotFound();
@@ -116,7 +116,7 @@ namespace mondayWebApp.Controllers
             
             if(department.DepartmentManagerID == null)
             {
-                var oldEmployeeManager = _context.Employees.Where(e => e.EmployeeID == TempData).Single();
+                var oldEmployeeManager = _context.Employees.Where(e => e.EmployeeID == TempBox).Single();
                 oldEmployeeManager.IsDepartmentManager = false;
                 _context.Employees.Update(oldEmployeeManager);
                 await _context.SaveChangesAsync();
