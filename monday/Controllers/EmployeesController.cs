@@ -256,6 +256,7 @@ namespace mondayWebApp.Controllers
             if(employee.IsDepartmentManager == true)
             {
                 var departmentManger = await _context.Departments.Where(d => d.DepartmentManagerID == employee.EmployeeID).Select(d => d).SingleAsync();
+                departmentManger.DepartmentManager = null;
                 departmentManger.DepartmentManagerID = null;
                 _context.Departments.Update(departmentManger);
                 await _context.SaveChangesAsync();

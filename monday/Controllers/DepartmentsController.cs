@@ -114,32 +114,38 @@ namespace mondayWebApp.Controllers
                 return NotFound();
             }
             
-            if(department.DepartmentManagerID == null)
-            {
-                var oldEmployeeManager = _context.Employees.Where(e => e.EmployeeID == TempBox).Single();
-                oldEmployeeManager.IsDepartmentManager = false;
-                _context.Employees.Update(oldEmployeeManager);
-                await _context.SaveChangesAsync();
-            }
-            
             if (ModelState.IsValid)
             {
                 try
                 {
                     if(department.DepartmentManagerID != null)
                     {
-                        var oldEmployeeManager = _context.Employees.Where(e => e.EmployeeID == TempBox).Single();
-                        oldEmployeeManager.IsDepartmentManager = false;
-                        _context.Employees.Update(oldEmployeeManager);
-                        await _context.SaveChangesAsync();
+                        if(TempBox == null) // Edycja po usunięciu kierownika działu
+                        {
+                            _context.Update(department);
+                            await _context.SaveChangesAsync();
+                            var employeeManager = _context.Employees.Where(e => e.DepartmentManager.DepartmentManagerID == department.DepartmentManagerID).Single();
+                            employeeManager.IsDepartmentManager = true;
+                            employeeManager.DepartmentID = department.DepartmentID;
+                            _context.Employees.Update(employeeManager);
+                            await _context.SaveChangesAsync();
+                            return RedirectToAction(nameof(Index));
+                        } else if(TempBox != null) // Tylko edytujemy
+                        {
+                            var oldEmployeeManager = _context.Employees.Where(e => e.EmployeeID == TempBox).Single();
+                            oldEmployeeManager.IsDepartmentManager = false;
+                            _context.Employees.Update(oldEmployeeManager);
+                            await _context.SaveChangesAsync();
+                            _context.Update(department);
+                            await _context.SaveChangesAsync();
+                            var employeeManager = _context.Employees.Where(e => e.DepartmentManager.DepartmentManagerID == department.DepartmentManagerID).Single();
+                            employeeManager.IsDepartmentManager = true;
+                            employeeManager.DepartmentID = department.DepartmentID;
+                            _context.Employees.Update(employeeManager);
+                            await _context.SaveChangesAsync();
+                            return RedirectToAction(nameof(Index));
+                        }
                     }
-                    _context.Update(department);
-                    await _context.SaveChangesAsync();
-                    var employeeManager = _context.Employees.Where(e => e.DepartmentManager.DepartmentManagerID == department.DepartmentManagerID).Single();
-                    employeeManager.IsDepartmentManager = true;
-                    employeeManager.DepartmentID = department.DepartmentID;
-                    _context.Employees.Update(employeeManager);
-                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
