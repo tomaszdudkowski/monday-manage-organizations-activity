@@ -66,17 +66,17 @@ namespace mondayWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                //if(!(User.IsInRole("Superadmin")))
-                //{
-                //    var user = await userManager.FindByNameAsync(User.Identity.Name);
-                //    var employeeUser = _context.Employees.Where(e => e.EmployeeUserID == user.Id);
-                //    Employee userU = null;
-                //    foreach (var item in employeeUser)
-                //    {
-                //        userU = item;
-                //    }
-                //    projectTask.TaskCreatedBy = userU;
-                //}
+                if (!(User.IsInRole("Superadmin")))
+                {
+                    var user = await userManager.FindByNameAsync(User.Identity.Name);
+                    var employeeUser = _context.Employees.Where(e => e.EmployeeUserID == user.Id);
+                    Employee userU = null;
+                    foreach (var item in employeeUser)
+                    {
+                        userU = item;
+                    }
+                    projectTask.TaskCreatedBy = userU.EmployeeID;
+                }
                 _context.Add(projectTask);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -120,6 +120,17 @@ namespace mondayWebApp.Controllers
             {
                 try
                 {
+                    if (!(User.IsInRole("Superadmin")))
+                    {
+                        var user = await userManager.FindByNameAsync(User.Identity.Name);
+                        var employeeUser = _context.Employees.Where(e => e.EmployeeUserID == user.Id);
+                        Employee userU = null;
+                        foreach (var item in employeeUser)
+                        {
+                            userU = item;
+                        }
+                        projectTask.TaskCreatedBy = userU.EmployeeID;
+                    }
                     _context.Update(projectTask);
                     await _context.SaveChangesAsync();
                 }

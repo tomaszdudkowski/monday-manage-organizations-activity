@@ -12,7 +12,7 @@ namespace mondayWebApp.Models
         public DateTime TaskDeadline { get; set; }
 
         // Nawiguje do Użytkownika tworzącego zadanie
-        public Employee TaskCreatedBy { get; set; }
+        public int? TaskCreatedBy { get; set; }
 
         // Nawiguje do obiektu Project
         public int? ProjectID { get; set; }

@@ -201,6 +201,7 @@ namespace mondayWebApp.Controllers
                         var result = await userManager.AddToRoleAsync(user, role.Name);
                         employee.EmployeeRole = role.Name;
                         employee.EmployeePassword = "";
+                        employee.EmployeeNameSurname = employee.EmployeeName + " " + employee.EmployeeSurname;
                         _context.Update(employee);
                         await _context.SaveChangesAsync();
                     }
