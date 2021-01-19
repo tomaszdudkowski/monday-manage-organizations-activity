@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using mondayWebApp.Data;
 
 namespace mondayWebApp.Areas.Identity.Pages.Account.Manage
 {
@@ -13,16 +14,22 @@ namespace mondayWebApp.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        //private readonly ApplicationDbContext _context;
 
         public IndexModel(
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager//,
+            //ApplicationDbContext context
+            )
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            //_context = context;
         }
 
         public string Username { get; set; }
+
+        public string UserNameSurname { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -43,7 +50,6 @@ namespace mondayWebApp.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
             Username = userName;
-
             Input = new InputModel
             {
                 PhoneNumber = phoneNumber

@@ -1,0 +1,30 @@
+﻿@model IEnumerable<ProjectTask>
+
+<h1 class="text-primary">Zadania zakończone</h1>
+<div>
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Data zakończenia</th>
+                <th>Utworzone przez</th>
+                <th>Tytuł</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ProjectTask projectTask in Model)
+            {
+                @if (projectTask.IsEnd == true)
+                {
+                    <tr>
+                        <td><a class="btn btn-danger btn-sm" asp-controller="Home" asp-action="RestoreTask" asp-route-id="@projectTask.TaskID">Przywróć zadanie</a></td>
+                        <td>@projectTask.TaskDeadline</td>
+                        <td>@projectTask.TaskCreatedBy</td>
+                        <td>@projectTask.TaskName</td>
+                        <td><a class="btn btn-info btn-sm">Szczegóły</a></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

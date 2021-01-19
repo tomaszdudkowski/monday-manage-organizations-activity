@@ -22,6 +22,9 @@ namespace mondayWebApp.Models
         public int? EmployeeID { get; set; }
         public Employee Employee { get; set; }
 
+        // Wskazuje czy zakończono zadanie
+        public bool IsEnd { get; set; }
+
         // Blokuje rekord przed edycją
         public bool IsEdited { get; set; }
 
