@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProjectTask>
+﻿@model IEnumerable<mondayWebApp.Models.ViewModels.ProjectTaskViewModel>
 
 <h1 class="text-primary">Zadania zakończone</h1>
 <div>
@@ -12,7 +12,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (ProjectTask projectTask in Model)
+            @foreach (mondayWebApp.Models.ViewModels.ProjectTaskViewModel projectTask in Model)
             {
                 @if (projectTask.IsEnd == true)
                 {

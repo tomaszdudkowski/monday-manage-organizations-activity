@@ -9,6 +9,7 @@ using mondayWebApp.Models;
 using mondayWebApp.Services;
 using mondayWebApp.Data;
 using Microsoft.AspNetCore.Identity;
+using mondayWebApp.Models.ViewModels;
 
 namespace mondayWebApp.Controllers
 {
@@ -32,7 +33,20 @@ namespace mondayWebApp.Controllers
                 var user = await userManager.GetUserAsync(User);
                 var employee = _context.Employees.Where(e => e.EmployeeUserID == user.Id).Single();
                 var ListOfTasks = _context.ProjectTasks.Where(p => p.EmployeeID == employee.EmployeeID).ToList();
-                return View(ListOfTasks);
+                List<ProjectTaskViewModel> ListOfTasksViewModel = new List<ProjectTaskViewModel>();
+                foreach (var item in ListOfTasks)
+                {
+                    ProjectTaskViewModel projectTaskViewModel = new ProjectTaskViewModel();
+                    projectTaskViewModel.TaskName = item.TaskName;
+                    var CreatedBy = _context.Employees.Where(e => e.EmployeeID == item.TaskCreatedBy).First();
+                    projectTaskViewModel.TaskID = item.TaskID;
+                    projectTaskViewModel.TaskDeadline = item.TaskDeadline;
+                    projectTaskViewModel.TaskCreatedBy = CreatedBy.EmployeeNameSurname;
+                    projectTaskViewModel.IsEnd = item.IsEnd;
+                    ListOfTasksViewModel.Add(projectTaskViewModel);
+                }
+                
+                return View(ListOfTasksViewModel);
             }
              
             return View();
