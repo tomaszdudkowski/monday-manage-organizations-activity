@@ -11,6 +11,9 @@ using mondayWebApp.Models;
 
 namespace mondayWebApp.Controllers
 {
+    /// <summary>
+    /// Kontroler zadań.
+    /// </summary>
     public class ProjectTasksController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,6 +25,10 @@ namespace mondayWebApp.Controllers
             userManager = userMgr;
         }
 
+        /// <summary>
+        /// Akcja pobierająca zadania z bazy danych.
+        /// </summary>
+        /// <returns>Widok z listą zadań i pracowników przypisanych do zadań.</returns>
         // GET: ProjectTasks
         public async Task<IActionResult> Index()
         {
@@ -29,6 +36,11 @@ namespace mondayWebApp.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        /// <summary>
+        /// Akcja pobierająca szczegółowe dane o wybranym zadaniu z bazy danych.
+        /// </summary>
+        /// <param name="id">Numer ID wybranego zadania.</param>
+        /// <returns>Widok z szczegółowymi danymi zadania.</returns>
         // GET: ProjectTasks/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -49,6 +61,10 @@ namespace mondayWebApp.Controllers
             return View(projectTask);
         }
 
+        /// <summary>
+        /// Akcja przygotowująca formularz do dodania nowego zadania.
+        /// </summary>
+        /// <returns>Widok z formularzem.</returns>
         // GET: ProjectTasks/Create
         public IActionResult Create()
         {
@@ -57,6 +73,12 @@ namespace mondayWebApp.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Akcja dodająca nowe zadanie do bazy danych.
+        /// Walidacja formularza.
+        /// </summary>
+        /// <param name="projectTask">Dane zadania z formularza.</param>
+        /// <returns>Widok z listą zadań.</returns>
         // POST: ProjectTasks/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -86,6 +108,11 @@ namespace mondayWebApp.Controllers
             return View(projectTask);
         }
 
+        /// <summary>
+        /// Akcja przygotowująca widok z formularzem edycji wybranego zadania.
+        /// </summary>
+        /// <param name="id">Numer ID wybranego zadania.</param>
+        /// <returns>Widok z formularzem edycji wybranego zadania.</returns>
         // GET: ProjectTasks/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -104,6 +131,13 @@ namespace mondayWebApp.Controllers
             return View(projectTask);
         }
 
+        /// <summary>
+        /// Akcja edytująca wybrane zadanie.
+        /// Zmiany zapisuje w bazie danych.
+        /// </summary>
+        /// <param name="id">Numer ID edytowanego zadania.</param>
+        /// <param name="projectTask">Wybrane zadanie do edycji. Dane z formularza.</param>
+        /// <returns>Widok listy z zadaniami.</returns>
         // POST: ProjectTasks/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -152,6 +186,11 @@ namespace mondayWebApp.Controllers
             return View(projectTask);
         }
 
+        /// <summary>
+        /// Akcja przygotowująca widok podsumowania wybranego do usunięcia zadania.
+        /// </summary>
+        /// <param name="id">Numer ID wybranego zadania.</param>
+        /// <returns>Widok podsumowania wybranego do usunięcia zadania.</returns>
         // GET: ProjectTasks/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -172,6 +211,12 @@ namespace mondayWebApp.Controllers
             return View(projectTask);
         }
 
+        /// <summary>
+        /// Akcja usuwająca wybrane zadanie.
+        /// Zmiany są zapisywane w bazie danych.
+        /// </summary>
+        /// <param name="id">Numer ID usuwanego zadania.</param>
+        /// <returns>Widok listy zadań.</returns>
         // POST: ProjectTasks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -183,6 +228,11 @@ namespace mondayWebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        /// <summary>
+        /// Metoda sprawdza istnienie zadania w bazie danych.
+        /// </summary>
+        /// <param name="id">Numer ID wybranego zadania.</param>
+        /// <returns>Prawda/Fałsz istnienia zadania w bazie danych.</returns>
         private bool ProjectTaskExists(int id)
         {
             return _context.ProjectTasks.Any(e => e.TaskID == id);

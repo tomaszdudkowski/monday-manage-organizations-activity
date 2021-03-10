@@ -11,6 +11,10 @@ using mondayWebApp.Models;
 
 namespace mondayWebApp.Controllers
 {
+    /// <summary>
+    /// Kontroler projektu.
+    /// Autoryzacja dla Superadministratora i Administratora.
+    /// </summary>
     [Authorize(Roles = "Superadmin, Admin")]
     public class ProjectsController : Controller
     {
@@ -21,6 +25,10 @@ namespace mondayWebApp.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Akcja pobierająca projekty z bazy danych.
+        /// </summary>
+        /// <returns>Widok z listą projektów i managerów projektów.</returns>
         // GET: Projects
         public async Task<IActionResult> Index()
         {
@@ -28,6 +36,11 @@ namespace mondayWebApp.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        /// <summary>
+        /// Akcja pobierająca szczegółowe dane o wybranym projekcie z bazy danych.
+        /// </summary>
+        /// <param name="id">Numer ID wybranego projektu.</param>
+        /// <returns>Widok z szczegółowymi danymi projektu.</returns>
         // GET: Projects/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -47,6 +60,10 @@ namespace mondayWebApp.Controllers
             return View(project);
         }
 
+        /// <summary>
+        /// Akcja przygotowująca formularz do dodania nowego projektu.
+        /// </summary>
+        /// <returns>Widok z formularzem.</returns>
         // GET: Projects/Create
         public IActionResult Create()
         {
@@ -55,6 +72,12 @@ namespace mondayWebApp.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Akcja dodająca nowy projekt do bazy danych.
+        /// Walidacja formularza.
+        /// </summary>
+        /// <param name="project">Dane projektu z formularza.</param>
+        /// <returns>Widok z listą proejktów.</returns>
         // POST: Projects/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -83,7 +106,16 @@ namespace mondayWebApp.Controllers
             return View(project);
         }
 
+        /// <summary>
+        /// Prywatna zmienna tymczasowa.
+        /// </summary>
         private static int? TempBox { get; set; }
+
+        /// <summary>
+        /// Akcja przygotowująca widok z formularzem edycji wybranego projektu.
+        /// </summary>
+        /// <param name="id">Numer ID wybranego projektu.</param>
+        /// <returns>Widok z formularzem edycji wybranego projektu.</returns>
         // GET: Projects/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -104,6 +136,13 @@ namespace mondayWebApp.Controllers
             return View(project);
         }
 
+        /// <summary>
+        /// Akcja edytująca wybrany projekt.
+        /// Zmiany zapisuje w bazie danych.
+        /// </summary>
+        /// <param name="id">Numer ID edytowanego projektu.</param>
+        /// <param name="project">Wybrany projekt do edycji. Dane z formularza.</param>
+        /// <returns>Widok listy z projektami.</returns>
         // POST: Projects/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -167,6 +206,11 @@ namespace mondayWebApp.Controllers
             return View(project);
         }
 
+        /// <summary>
+        /// Akcja przygotowująca widok podsumowania wybranego do usunięcia projektu.
+        /// </summary>
+        /// <param name="id">Numer ID wybranego projektu.</param>
+        /// <returns>Widok podsumowania wybranego do usunięcia projektu.</returns>
         // GET: Projects/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -186,6 +230,12 @@ namespace mondayWebApp.Controllers
             return View(project);
         }
 
+        /// <summary>
+        /// Akcja usuwająca wybrany projekt.
+        /// Zmiany zapisuje w bazie danych.
+        /// </summary>
+        /// <param name="id">Numer ID usuwanego projektu.</param>
+        /// <returns>Widok listy projektów.</returns>
         // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -201,6 +251,11 @@ namespace mondayWebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        /// <summary>
+        /// Metoda sprawdza istnienie projektu w bazie danych.
+        /// </summary>
+        /// <param name="id">Numer ID wybranego projektu.</param>
+        /// <returns>Prawda/Fałsz istnienia projektu w bazie danych.</returns>
         private bool ProjectExists(int id)
         {
             return _context.Projects.Any(e => e.ProjectID == id);
