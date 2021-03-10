@@ -13,6 +13,10 @@ using mondayWebApp.Models.ViewModels;
 
 namespace mondayWebApp.Controllers
 {
+    /// <summary>
+    /// Kontorler głównej strony aplikacji internetowej.
+    /// Kontorler użytkownika (pracownika).
+    /// </summary>
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -26,6 +30,12 @@ namespace mondayWebApp.Controllers
             userManager = userMgr;
         }
 
+        /// <summary>
+        /// Akcja przygotowuje widok dla głównej strony aplikacji.
+        /// Jeżeli zalogowany zostanie użytkownik z rolą "User", 
+        /// to zostanie wygenerowany widok listy zadań (widok użytkownika - pracownika).
+        /// </summary>
+        /// <returns>Lista zadań użytkownika lub widok strony głównej.</returns>
         public async Task<IActionResult> IndexAsync()
         {
             if(User.IsInRole("User"))
@@ -52,6 +62,12 @@ namespace mondayWebApp.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Metoda zmienia status wybranego zadania na zakończone.
+        /// Przenosi zadanie do listy zakończone zadania.
+        /// </summary>
+        /// <param name="id">Numer ID wybranego zadania.</param>
+        /// <returns>Widok listy zadań użytkownika.</returns>
         public IActionResult EndTask(int id)
         {
             var projectTask = _context.ProjectTasks.Where(t => t.TaskID == id).Single();
@@ -61,6 +77,12 @@ namespace mondayWebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        /// <summary>
+        /// Metoda zmienia status wybranego zadania na nie zakończone.
+        /// Przenosi zadanie do listy nie zakończonych zadań.
+        /// </summary>
+        /// <param name="id">Numer ID wybranego zadania.</param>
+        /// <returns>Widok listy zadań użytkownika.</returns>
         public IActionResult RestoreTask(int id)
         {
             var projectTask = _context.ProjectTasks.Where(t => t.TaskID == id).Single();
@@ -70,11 +92,19 @@ namespace mondayWebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        /// <summary>
+        /// Akcja zwraca widok strony Prywatność i pliki cookie.
+        /// </summary>
+        /// <returns>Widok strony prywaność i pliki cookie.</returns>
         public IActionResult Privacy()
         {
             return View();
         }
 
+        /// <summary>
+        /// Akcja zwraca widok błędu.
+        /// </summary>
+        /// <returns>Widok strony błędu.</returns>
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

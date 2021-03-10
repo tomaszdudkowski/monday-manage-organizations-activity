@@ -11,6 +11,10 @@ using mondayWebApp.Models;
 
 namespace mondayWebApp.Controllers
 {
+    /// <summary>
+    /// Kontroler działu firmy.
+    /// Autoryzacja dla Superadmistratora i Administratora.
+    /// </summary>
     [Authorize(Roles = "Superadmin, Admin")]
     public class DepartmentsController : Controller
     {
@@ -21,6 +25,10 @@ namespace mondayWebApp.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Akcja pobierająca działy firmy z bazy danych.
+        /// </summary>
+        /// <returns>Widok z listą działów i managerów działów.</returns>
         // GET: Departments
         public async Task<IActionResult> Index()
         {
@@ -28,6 +36,11 @@ namespace mondayWebApp.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        /// <summary>
+        /// Akcja pobierająca szczegółowe dane o wybranym dziale firmy z bazy danych.
+        /// </summary>
+        /// <param name="id">Numer ID wybranego działu.</param>
+        /// <returns>Widok z szczegółowymi danymi działu.</returns>
         // GET: Departments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -47,6 +60,10 @@ namespace mondayWebApp.Controllers
             return View(department);
         }
 
+        /// <summary>
+        /// Akcja przygotowująca formularz do dodania nowego działu firmy.
+        /// </summary>
+        /// <returns>Widok z formularzem</returns>
         // GET: Departments/Create
         public IActionResult Create()
         {
@@ -55,6 +72,12 @@ namespace mondayWebApp.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Akcja dodająca nowy dział firmy do bazy danych.
+        /// Walidacja formularza.
+        /// </summary>
+        /// <param name="department">Dane działu z formularza.</param>
+        /// <returns>Widok z listą działów firmy.</returns>
         // POST: Departments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -82,7 +105,17 @@ namespace mondayWebApp.Controllers
             ViewData["DepartmentManagerID"] = new SelectList(emplAdminList, "EmployeeID", "EmployeeNameSurname");
             return View(department);
         }
+
+        /// <summary>
+        /// Prywatna zmienna tymczasowa.
+        /// </summary>
         private static int? TempBox { get; set; }
+
+        /// <summary>
+        /// Akcja przygotowująca widok z formularzem edycji wybranego działu.
+        /// </summary>
+        /// <param name="id">Numer ID wybranego działu.</param>
+        /// <returns>Widok z formularzem edycji wybranego działu.</returns>
         // GET: Departments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -102,6 +135,13 @@ namespace mondayWebApp.Controllers
             return View(department);
         }
 
+        /// <summary>
+        /// Akcja edytująca wybrany dział.
+        /// Zmiany zapisuje w bazie danych.
+        /// </summary>
+        /// <param name="id">Numer ID edytowanego działu.</param>
+        /// <param name="department">Wybrany dział do edycji. Dane z formularza.</param>
+        /// <returns>Widok listy z działami firmy.</returns>
         // POST: Departments/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -165,6 +205,11 @@ namespace mondayWebApp.Controllers
             return View(department);
         }
 
+        /// <summary>
+        /// Akcja przygotowująca widok podsumowania wybranego do usunięcia działu firmy.
+        /// </summary>
+        /// <param name="id">Numer ID wybranego działu.</param>
+        /// <returns>Widok podsumowania wybranego do usunięcia działu.</returns>
         // GET: Departments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -184,6 +229,12 @@ namespace mondayWebApp.Controllers
             return View(department);
         }
 
+        /// <summary>
+        /// Akcja usuwająca wybrany dział firmy.
+        /// Zmiany są zapisywane w bazie danych.
+        /// </summary>
+        /// <param name="id">Numer ID usuwanego działu.</param>
+        /// <returns>Widok listy działów.</returns>
         // POST: Departments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -199,6 +250,11 @@ namespace mondayWebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        /// <summary>
+        /// Metoda sprawdza istnienie działu w bazie danych.
+        /// </summary>
+        /// <param name="id">Numer ID wybranego działu.</param>
+        /// <returns>Prawda/Fałsz istnienia działu w bazie danych.</returns>
         private bool DepartmentExists(int id)
         {
             return _context.Departments.Any(e => e.DepartmentID == id);

@@ -12,6 +12,9 @@ using mondayWebApp.Models;
 
 namespace mondayWebApp.Controllers
 {
+    /// <summary>
+    /// Kontroler pracownika firmy.
+    /// </summary>
     public class EmployeesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,6 +28,11 @@ namespace mondayWebApp.Controllers
             userManager = userMgr;
         }
 
+        /// <summary>
+        /// Akcja przygotowuje widok listy pracowników.
+        /// Dane są pobierane z bazy danych.
+        /// </summary>
+        /// <returns>Widok listy z pracownikami firmy.</returns>
         // GET: Employees
         public async Task<IActionResult> Index()
         {
@@ -32,6 +40,11 @@ namespace mondayWebApp.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        /// <summary>
+        /// Akcja przygotowuje widok z danymi szczegółowymi wybranego pracownika.
+        /// </summary>
+        /// <param name="id">Numer ID wybranego pracownika.</param>
+        /// <returns>Widok danych szczegółowych wybranego pracownika.</returns>
         [Authorize(Roles = "Admin")]
         // GET: Employees/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -53,6 +66,10 @@ namespace mondayWebApp.Controllers
             return View(employee);
         }
 
+        /// <summary>
+        /// Akcja przygotowuje formularz dodawania nowego pracownika do bazy danych.
+        /// </summary>
+        /// <returns>Widok formularza dodawania nowego pracownika.</returns>
         [Authorize(Roles = "Superadmin, Admin")]
         // GET: Employees/Create
         public async Task<IActionResult> CreateAsync()
@@ -74,6 +91,12 @@ namespace mondayWebApp.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Akcja dodaje utworzonego pracownika do bazy danych.
+        /// Dane pobierane są z formularza dodawania nowego pracownika.
+        /// </summary>
+        /// <param name="employee">Dane z formularza dodawania nowego pracownika.</param>
+        /// <returns>Lista pracowników firmy.</returns>
         [Authorize(Roles = "Superadmin, Admin")]
         // POST: Employees/Create
         [HttpPost]
@@ -113,6 +136,11 @@ namespace mondayWebApp.Controllers
             return View(employee);
         }
 
+        /// <summary>
+        /// Akcja przygotowująca widok z formularzem edycji wybranego pracownika firmy.
+        /// </summary>
+        /// <param name="id">Nume ID wybranego pracownika firmy.</param>
+        /// <returns>Widok formularza edycji wybranego pracownika.</returns>
         [Authorize(Roles = "Superadmin, Admin")]
         // GET: Employees/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -155,6 +183,13 @@ namespace mondayWebApp.Controllers
             return View(employee);
         }
 
+        /// <summary>
+        /// Akcja edytująca wybranego pracwonika.
+        /// Zmiany zapisuje w bazie danych.
+        /// </summary>
+        /// <param name="id">Numer ID wybranego pracownika do edycji.</param>
+        /// <param name="employee">Dane z formularza edycji pracownika.</param>
+        /// <returns>Widok listy pracowników firmy.</returns>
         [Authorize(Roles = "Superadmin, Admin")]
         // POST: Employees/Edit/5
         [HttpPost]
@@ -224,6 +259,11 @@ namespace mondayWebApp.Controllers
             return View(employee);
         }
 
+        /// <summary>
+        /// Akcja przygotowująca widok podsumowania usuwanego pracownika firmy.
+        /// </summary>
+        /// <param name="id">Numer ID wybranego pracownika do usunięcia.</param>
+        /// <returns>Widok z podsumowaniem usuwanego pracownika.</returns>
         [Authorize(Roles = "Admin, Superadmin")]
         // GET: Employees/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -245,6 +285,12 @@ namespace mondayWebApp.Controllers
             return View(employee);
         }
 
+        /// <summary>
+        /// Akcja usuwająca wybranego pracownika.
+        /// Zmiany są zapisywane w bazie danych.
+        /// </summary>
+        /// <param name="id">Numer ID wybranego pracownika do usunięcia.</param>
+        /// <returns>Widok listy pracowników.</returns>
         [Authorize(Roles = "Admin, Superadmin")]
         // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -275,6 +321,11 @@ namespace mondayWebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        /// <summary>
+        /// Metoda sprawdzająca istnienie wybranego pracwonika w bazie danych.
+        /// </summary>
+        /// <param name="id">Numer ID wybranego pracownika.</param>
+        /// <returns>Prawda/Fałsz istnienia pracownika w bazie danych.</returns>
         private bool EmployeeExists(string id)
         {
             return _context.Employees.Any(e => e.EmployeeID.Equals(id));

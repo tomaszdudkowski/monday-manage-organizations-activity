@@ -15,12 +15,12 @@ namespace mondayWebApp.Models
         [Required(ErrorMessage = "Proszę wprowadzić opis działu firmy.")]
         [StringLength(400)]
         public string DepartmentDesc { get; set; }
-        [Required(ErrorMessage = "Proszę wprowadzić datę powstania działu firmy.")]
+        //[Required(ErrorMessage = "Proszę wprowadzić datę powstania działu firmy.")]
         public DateTime DepartmentEstablishmentDate { get; set; }
 
         // Nawiguje do DepartmentManager
         public int? DepartmentManagerID { get; set; }
-        [Required(ErrorMessage = "Proszę wybrać kierownika działu firmy.")]
+        //[Required(ErrorMessage = "Proszę wybrać kierownika działu firmy.")]
         public Employee DepartmentManager { get; set; }
 
         // Pracownicy działu
