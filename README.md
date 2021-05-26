@@ -1,5 +1,9 @@
 # .monday
-Aplikacja webowa do zarządzania małą firmą  - wyspecjalizowany moduł zarządzania zespołem
+Software module that helps manage your organization's activity (Employees, Departments, Projects, Tasks, Roles...).
+
+This software module was wrote with ASP.NET CORE platform and C# language. Designed for small and medium companies and freelancers.
+
+You can freely use this manage module. You can use it as a standalone app or as a web app to access it form the Internet or a LAN.
 <p>&nbsp;</p>
 
 ## This project contains technologies:
@@ -13,5 +17,8 @@ Aplikacja webowa do zarządzania małą firmą  - wyspecjalizowany moduł zarzą
 
 ## Features:
 <ul>
-  <li>None</li>
+  <li>Employees, Departments management/li>
+  <li>Projects & Tasks management</li>
+  <li>Members/Membership management</li>
+  <li>Multi-Users and groups with finely grained rights</li>
 </ul>
